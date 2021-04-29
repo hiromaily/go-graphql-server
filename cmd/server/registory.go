@@ -3,9 +3,9 @@ package main
 import (
 	"go.uber.org/zap"
 
-	"github.com/hiromaily/graphql-sample-go/pkg/config"
-	"github.com/hiromaily/graphql-sample-go/pkg/logger"
-	"github.com/hiromaily/graphql-sample-go/pkg/server"
+	"github.com/hiromaily/go-graphql-server/pkg/config"
+	"github.com/hiromaily/go-graphql-server/pkg/logger"
+	"github.com/hiromaily/go-graphql-server/pkg/server"
 )
 
 // Registry interface

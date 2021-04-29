@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/hiromaily/graphql-sample-go/pkg/config"
+	"github.com/hiromaily/go-graphql-server/pkg/config"
 )
 
 const installPath = "/usr/local/etc/graphql-server/"

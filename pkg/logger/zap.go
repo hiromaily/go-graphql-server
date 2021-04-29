@@ -7,7 +7,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/hiromaily/graphql-sample-go/pkg/config"
+	"github.com/hiromaily/go-graphql-server/pkg/config"
 )
 
 // LogEnv dev/prod/custom

@@ -1,4 +1,4 @@
-# graphql-sample-go
+# go-graphql-server
 GraphQL sample
 
 ## References

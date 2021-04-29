@@ -1,4 +1,4 @@
-module github.com/hiromaily/graphql-sample-go
+module github.com/hiromaily/go-graphql-server
 
 go 1.16
 
