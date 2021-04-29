@@ -55,7 +55,11 @@ func (s *server) Start() error {
 	handler.Initialize(s.schema)
 
 	s.logger.Info("server is running", zap.Int("port", s.port))
-	fmt.Printf("command:\n curl -g 'http://localhost:%d/graphql?query={user(id:\"1\"){name}}'", s.port)
+	fmt.Printf(`
+command:
+  curl -g 'http://localhost:%d/graphql?query={user(id:"1"){name}}'
+  curl -g 'http://localhost:%d/graphql?query={userList{id,name}}'
+`, s.port, s.port)
 	http.ListenAndServe(fmt.Sprintf(":%d", s.port), nil)
 
 	return nil

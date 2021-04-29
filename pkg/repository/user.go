@@ -25,6 +25,15 @@ func (u *userMap) Fetch(id string) user.UserType {
 	return u.repo[id]
 }
 
+func (u *userMap) FetchAll() []user.UserType {
+	// convert map to slice
+	utList := make([]user.UserType, 0, len(u.repo))
+	for _, val := range u.repo {
+		utList = append(utList, val)
+	}
+	return utList
+}
+
 // Helper function to import json from file to map
 func importJSONDataFromFile(fileName string) (map[string]user.UserType, error) {
 	var data map[string]user.UserType

@@ -40,6 +40,9 @@ func newQueryType(userResolver user.UserFieldResolver) *graphql.Object {
 		graphql.ObjectConfig{
 			Name: "Query",
 			Fields: graphql.Fields{
+				/*
+				   curl -g 'http://localhost:8080/graphql?query={user(id:"1"){name}}'
+				*/
 				"user": &graphql.Field{
 					Type: userType,
 					Args: graphql.FieldConfigArgument{
@@ -47,15 +50,15 @@ func newQueryType(userResolver user.UserFieldResolver) *graphql.Object {
 							Type: graphql.String,
 						},
 					},
-					//Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					//	idQuery, isOK := p.Args["id"].(string)
-					//	if isOK {
-					//		return userFetcher.Fetch(idQuery), nil
-					//	}
-					//	return nil, nil
-					//},
-					//FieldResolveFn
 					Resolve: userResolver.GetByID,
+				},
+				/*
+				   curl -g 'http://localhost:8080/graphql?query={userList{id,name}}'
+				*/
+				"userList": &graphql.Field{
+					Type:        graphql.NewList(userType),
+					Description: "List of user",
+					Resolve:     userResolver.UserList,
 				},
 			},
 		})

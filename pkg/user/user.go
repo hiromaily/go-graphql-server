@@ -7,6 +7,7 @@ import (
 
 type User interface {
 	Fetch(id string) UserType
+	FetchAll() []UserType
 }
 
 type UserType struct {
@@ -16,6 +17,7 @@ type UserType struct {
 
 type UserFieldResolver interface {
 	GetByID(p graphql.ResolveParams) (interface{}, error)
+	UserList(p graphql.ResolveParams) (interface{}, error)
 }
 
 type userFieldResolver struct {
@@ -39,4 +41,8 @@ func (u *userFieldResolver) GetByID(p graphql.ResolveParams) (interface{}, error
 		return u.fetcher.Fetch(idQuery), nil
 	}
 	return nil, nil
+}
+
+func (u *userFieldResolver) UserList(_ graphql.ResolveParams) (interface{}, error) {
+	return u.fetcher.FetchAll(), nil
 }

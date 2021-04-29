@@ -52,3 +52,9 @@ build-version:
 run:
 	go run -v ./cmd/server/
 
+
+###############################################################################
+# curl sample
+###############################################################################
+# curl -g 'http://localhost:8080/graphql?query={user(id:"3"){id,name}}'
+# curl -g 'http://localhost:8080/graphql?query={userList{id,name}}'
