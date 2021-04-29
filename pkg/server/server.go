@@ -1,6 +1,14 @@
 package server
 
-import "go.uber.org/zap"
+import (
+	"fmt"
+	"net/http"
+
+	"github.com/graphql-go/graphql"
+	"go.uber.org/zap"
+
+	"github.com/hiromaily/go-graphql-server/pkg/server/handler"
+)
 
 // Server interface
 type Server interface {
@@ -12,10 +20,12 @@ type Server interface {
 // NewServer returns Server interface
 func NewServer(
 	logger *zap.Logger,
+	schema graphql.Schema,
 	port int,
 ) Server {
 	return newServer(
 		logger,
+		schema,
 		port,
 	)
 }
@@ -23,22 +33,31 @@ func NewServer(
 // server object
 type server struct {
 	logger *zap.Logger
+	schema graphql.Schema
 	port   int
 }
 
-// NewBook is to return book object
+// newServer returns server object
 func newServer(
 	logger *zap.Logger,
+	schema graphql.Schema,
 	port int,
 ) *server {
 	return &server{
 		logger: logger,
+		schema: schema,
 		port:   port,
 	}
 }
 
 // Start starts server
 func (s *server) Start() error {
+	handler.Initialize(s.schema)
+
+	fmt.Println("Now server is running on port 8080")
+	fmt.Println("Test with Get      : curl -g 'http://localhost:8080/graphql?query={user(id:\"1\"){name}}'")
+	http.ListenAndServe(fmt.Sprintf(":%d", s.port), nil)
+
 	return nil
 }
 
@@ -46,6 +65,6 @@ func (s *server) Start() error {
 func (s *server) Clean() {
 }
 
-// Clean closes dependencies
+// Close closes dependencies
 func (s *server) Close() {
 }

@@ -1,114 +1,71 @@
 package main
 
 import (
-	"encoding/json"
+	"flag"
 	"fmt"
-	"io/ioutil"
-	"net/http"
+	"log"
+	"os"
 
-	"github.com/graphql-go/graphql"
+	"github.com/pkg/errors"
+
+	"github.com/hiromaily/go-graphql-server/pkg/config"
+	"github.com/hiromaily/go-graphql-server/pkg/files"
 )
 
-type user struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+var (
+	tomlPath  = flag.String("toml", "", "TOML file path")
+	isVersion = flag.Bool("v", false, "version")
+	// -d daemon mode
+	version string
+)
+
+var usage = `Usage: %s [options...]
+Options:
+  -toml      Toml file path for config
+  -v         show version
+`
+
+// init() can not be used because it affects main_test.go as well.
+func init() {
 }
 
-var data map[string]user
-
-/*
-   Create User object type with fields "id" and "name" by using GraphQLObjectTypeConfig:
-       - Name: name of object type
-       - Fields: a map of fields by using GraphQLFields
-   Setup type of field use GraphQLFieldConfig
-*/
-var userType = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "User",
-		Fields: graphql.Fields{
-			"id": &graphql.Field{
-				Type: graphql.String,
-			},
-			"name": &graphql.Field{
-				Type: graphql.String,
-			},
-		},
-	},
-)
-
-/*
-   Create Query object type with fields "user" has type [userType] by using GraphQLObjectTypeConfig:
-       - Name: name of object type
-       - Fields: a map of fields by using GraphQLFields
-   Setup type of field use GraphQLFieldConfig to define:
-       - Type: type of field
-       - Args: arguments to query with current field
-       - Resolve: function to query data using params from [Args] and return value with current type
-*/
-var queryType = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "Query",
-		Fields: graphql.Fields{
-			"user": &graphql.Field{
-				Type: userType,
-				Args: graphql.FieldConfigArgument{
-					"id": &graphql.ArgumentConfig{
-						Type: graphql.String,
-					},
-				},
-				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					idQuery, isOK := p.Args["id"].(string)
-					if isOK {
-						return data[idQuery], nil
-					}
-					return nil, nil
-				},
-			},
-		},
-	})
-
-var schema, _ = graphql.NewSchema(
-	graphql.SchemaConfig{
-		Query: queryType,
-	},
-)
-
-func executeQuery(query string, schema graphql.Schema) *graphql.Result {
-	result := graphql.Do(graphql.Params{
-		Schema:        schema,
-		RequestString: query,
-	})
-	if len(result.Errors) > 0 {
-		fmt.Printf("wrong result, unexpected errors: %v", result.Errors)
+func parseFlag() {
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, usage, os.Args[0])
 	}
-	return result
+	flag.Parse()
+}
+
+func checkVersion() {
+	if *isVersion {
+		fmt.Printf("%s %s\n", "book-teacher", version)
+		os.Exit(0)
+	}
+}
+
+func getConfig() *config.Root {
+	configPath := files.GetConfigPath(*tomlPath)
+	if configPath == "" {
+		log.Fatal(errors.New("config file is not found"))
+	}
+	log.Println("config file: ", configPath)
+	conf, err := config.NewConfig(configPath)
+	if err != nil {
+		panic(err)
+	}
+	return conf
 }
 
 func main() {
-	_ = importJSONDataFromFile("./assets/data.json", &data)
+	parseFlag()
+	checkVersion()
 
-	http.HandleFunc("/graphql", func(w http.ResponseWriter, r *http.Request) {
-		result := executeQuery(r.URL.Query().Get("query"), schema)
-		json.NewEncoder(w).Encode(result)
-	})
+	conf := getConfig()
+	regi := NewRegistry(conf)
 
-	fmt.Println("Now server is running on port 8080")
-	fmt.Println("Test with Get      : curl -g 'http://localhost:8080/graphql?query={user(id:\"1\"){name}}'")
-	http.ListenAndServe(":8080", nil)
-}
-
-// Helper function to import json from file to map
-func importJSONDataFromFile(fileName string, result interface{}) (isOK bool) {
-	isOK = true
-	content, err := ioutil.ReadFile(fileName)
-	if err != nil {
-		fmt.Print("Error:", err)
-		isOK = false
+	srv := regi.NewServer()
+	if err := srv.Start(); err != nil {
+		log.Fatal(err)
 	}
-	err = json.Unmarshal(content, result)
-	if err != nil {
-		isOK = false
-		fmt.Print("Error:", err)
-	}
-	return
+	srv.Clean()
 }
