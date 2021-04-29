@@ -46,6 +46,13 @@ func (r *registry) newLogger() *zap.Logger {
 
 func (r *registry) newSchema() graphql.Schema {
 	return schema.NewSchema(
+		r.newUserFieldResolver(),
+	)
+}
+
+func (r *registry) newUserFieldResolver() user.UserFieldResolver {
+	return user.NewUserFieldResolveFn(
+		r.newLogger(),
 		r.newUserRepo(),
 	)
 }

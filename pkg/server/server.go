@@ -54,8 +54,8 @@ func newServer(
 func (s *server) Start() error {
 	handler.Initialize(s.schema)
 
-	fmt.Println("Now server is running on port 8080")
-	fmt.Println("Test with Get      : curl -g 'http://localhost:8080/graphql?query={user(id:\"1\"){name}}'")
+	s.logger.Info("server is running", zap.Int("port", s.port))
+	fmt.Printf("command:\n curl -g 'http://localhost:%d/graphql?query={user(id:\"1\"){name}}'", s.port)
 	http.ListenAndServe(fmt.Sprintf(":%d", s.port), nil)
 
 	return nil

@@ -26,7 +26,7 @@ var userType = graphql.NewObject(
 	},
 )
 
-func newQueryType(userFetcher user.User) *graphql.Object {
+func newQueryType(userResolver user.UserFieldResolver) *graphql.Object {
 	/*
 	   Create Query object type with fields "user" has type [userType] by using GraphQLObjectTypeConfig:
 	       - Name: name of object type
@@ -47,13 +47,15 @@ func newQueryType(userFetcher user.User) *graphql.Object {
 							Type: graphql.String,
 						},
 					},
-					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-						idQuery, isOK := p.Args["id"].(string)
-						if isOK {
-							return userFetcher.Fetch(idQuery), nil
-						}
-						return nil, nil
-					},
+					//Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+					//	idQuery, isOK := p.Args["id"].(string)
+					//	if isOK {
+					//		return userFetcher.Fetch(idQuery), nil
+					//	}
+					//	return nil, nil
+					//},
+					//FieldResolveFn
+					Resolve: userResolver.GetByID,
 				},
 			},
 		})
@@ -61,11 +63,11 @@ func newQueryType(userFetcher user.User) *graphql.Object {
 	return queryType
 }
 
-func NewSchema(userFetcher user.User) graphql.Schema {
+func NewSchema(userResolver user.UserFieldResolver) graphql.Schema {
 	// schema
 	schema, _ := graphql.NewSchema(
 		graphql.SchemaConfig{
-			Query: newQueryType(userFetcher),
+			Query: newQueryType(userResolver),
 		},
 	)
 	return schema
