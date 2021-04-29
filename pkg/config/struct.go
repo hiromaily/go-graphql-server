@@ -1,5 +1,7 @@
 package config
 
+import "github.com/hiromaily/go-graphql-server/pkg/server/httpmethod"
+
 // Root is root config
 type Root struct {
 	Server *Server `toml:"server" validate:"required"`
@@ -8,7 +10,8 @@ type Root struct {
 
 // Server is server information
 type Server struct {
-	Port int `toml:"port" validate:"required"`
+	Port       int                   `toml:"port" validate:"required"`
+	HTTPMethod httpmethod.HTTPMethod `toml:"http_method" validate:"oneof=GET POST"`
 }
 
 // Logger is zap logger property

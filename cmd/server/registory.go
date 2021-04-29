@@ -33,6 +33,7 @@ func (r *registry) NewServer() server.Server {
 	return server.NewServer(
 		r.newLogger(),
 		r.newSchema(),
+		r.conf.Server.HTTPMethod,
 		r.conf.Server.Port,
 	)
 }

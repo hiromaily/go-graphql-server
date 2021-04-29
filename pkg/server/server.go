@@ -8,6 +8,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/hiromaily/go-graphql-server/pkg/server/handler"
+	"github.com/hiromaily/go-graphql-server/pkg/server/httpmethod"
 )
 
 // Server interface
@@ -20,11 +21,13 @@ type Server interface {
 func NewServer(
 	logger *zap.Logger,
 	schema graphql.Schema,
+	method httpmethod.HTTPMethod,
 	port int,
 ) Server {
 	return newServer(
 		logger,
 		schema,
+		method,
 		port,
 	)
 }
@@ -33,6 +36,7 @@ func NewServer(
 type server struct {
 	logger *zap.Logger
 	schema graphql.Schema
+	method httpmethod.HTTPMethod
 	port   int
 }
 
@@ -40,18 +44,22 @@ type server struct {
 func newServer(
 	logger *zap.Logger,
 	schema graphql.Schema,
+	method httpmethod.HTTPMethod,
 	port int,
 ) *server {
 	return &server{
 		logger: logger,
 		schema: schema,
+		method: method,
 		port:   port,
 	}
 }
 
 // Start starts server
 func (s *server) Start() error {
-	handler.Initialize(s.schema)
+	if err := handler.Initialize(s.schema, s.method); err != nil {
+		return err
+	}
 
 	s.logger.Info("server is running", zap.Int("port", s.port))
 	fmt.Printf(`
