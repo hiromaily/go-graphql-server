@@ -1,5 +1,26 @@
 # go-graphql-server
-GraphQL sample
+GraphQL server sample
+
+## Requirements
+- Golang 1.16+
+- [direnv](https://direnv.net/) for MacUser for environment variable. See `.envrc`
+
+## Setup
+```
+cp example.envrc .envrc
+direnv allow
+```
+
+## Run server
+```
+make run
+```
+
+## available query
+```
+curl -g 'http://localhost:%d/graphql?query={user(id:"1"){id,name}}'
+curl -g 'http://localhost:%d/graphql?query={userList{id,name}}'
+```
 
 ## References
 - [graphql.org](https://graphql.org/)
