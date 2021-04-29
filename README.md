@@ -1,5 +1,5 @@
 # go-graphql-server
-GraphQL server sample
+GraphQL server sample using [graphql-go/graphql](https://github.com/graphql-go/graphql)
 
 ## Requirements
 - Golang 1.16+
@@ -18,7 +18,7 @@ make run
 
 ## available query
 ```
-curl -g 'http://localhost:%d/graphql?query={user(id:"1"){id,name}}'
+curl -g 'http://localhost:%d/graphql?query={user(id:"1"){id,name,age,country}}'
 curl -g 'http://localhost:%d/graphql?query={userList{id,name}}'
 ```
 
