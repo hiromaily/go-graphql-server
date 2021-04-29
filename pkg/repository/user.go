@@ -11,6 +11,7 @@ type userMap struct {
 	repo map[string]user.UserType
 }
 
+// NewUserMapRepo returns User interface
 func NewUserMapRepo() (user.User, error) {
 	data, err := importJSONDataFromFile("./assets/user.json")
 	if err != nil {
@@ -21,10 +22,12 @@ func NewUserMapRepo() (user.User, error) {
 	}, nil
 }
 
+// Fetch returns user by id
 func (u *userMap) Fetch(id string) user.UserType {
 	return u.repo[id]
 }
 
+// FetchALl returns all users
 func (u *userMap) FetchAll() []user.UserType {
 	// convert map to slice
 	utList := make([]user.UserType, 0, len(u.repo))

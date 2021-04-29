@@ -51,7 +51,7 @@ func (r *registry) newSchema() graphql.Schema {
 }
 
 func (r *registry) newUserFieldResolver() user.UserFieldResolver {
-	return user.NewUserFieldResolveFn(
+	return user.NewUserFieldResolve(
 		r.newLogger(),
 		r.newUserRepo(),
 	)

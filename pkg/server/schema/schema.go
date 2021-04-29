@@ -66,6 +66,7 @@ func newQueryType(userResolver user.UserFieldResolver) *graphql.Object {
 	return queryType
 }
 
+// NewSchema returns graphql.Schema
 func NewSchema(userResolver user.UserFieldResolver) graphql.Schema {
 	// schema
 	schema, _ := graphql.NewSchema(
