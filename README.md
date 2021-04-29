@@ -18,8 +18,12 @@ make run
 
 ## available query
 ```
-curl -g 'http://localhost:%d/graphql?query={user(id:"1"){id,name,age,country}}'
-curl -g 'http://localhost:%d/graphql?query={userList{id,name}}'
+#  [option] -g, --globoff: Disable URL sequences and ranges using {} and []
+curl -g 'http://localhost:8080/graphql?query={user(id:"1"){id,name,age,country}}'
+curl -g 'http://localhost:8080/graphql?query={userList{id,name}}'
+curl -g 'http://localhost:8080/graphql?query=mutation+_{createUser(name:"Tom",age:15,country:"Japan"){id,name,age,country}}'
+curl -g 'http://localhost:8080/graphql?query=mutation+_{updateUser(id:"1",name:"Dummy",age:99,country:"Japan"){id,name,age,country}}'
+curl -g 'http://localhost:8080/graphql?query=mutation+_{deleteUser(id:"2"){id,name,age,country}}'
 ```
 
 ## References

@@ -10,8 +10,8 @@ func newMutationType(userResolver user.UserFieldResolver) *graphql.Object {
 	mutationType := graphql.NewObject(graphql.ObjectConfig{
 		Name: "Mutation",
 		Fields: graphql.Fields{
-			/* Create new product item
-			http://localhost:8080/product?query=mutation+_{create(name:"Inca Kola",info:"Inca Kola is a soft drink that was created in Peru in 1935 by British immigrant Joseph Robinson Lindley using lemon verbena (wiki)",price:1.99){id,name,info,price}}
+			/*
+			   curl -g 'http://localhost:8080/graphql?query=mutation+_{createUser(name:"Tom",age:15,country:"Japan"){id,name,age,country}}'
 			*/
 			"createUser": &graphql.Field{
 				Type:        userType,
@@ -30,10 +30,10 @@ func newMutationType(userResolver user.UserFieldResolver) *graphql.Object {
 				Resolve: userResolver.Create,
 			},
 
-			/* Update product by id
-			   http://localhost:8080/product?query=mutation+_{update(id:1,price:3.95){id,name,info,price}}
+			/*
+				curl -g 'http://localhost:8080/graphql?query=mutation+_{updateUser(id:"1",name:"Dummy",age:99,country:"Japan"){id,name,age,country}}'
 			*/
-			"update": &graphql.Field{
+			"updateUser": &graphql.Field{
 				Type:        userType,
 				Description: "Update user by id",
 				Args: graphql.FieldConfigArgument{
@@ -53,10 +53,10 @@ func newMutationType(userResolver user.UserFieldResolver) *graphql.Object {
 				Resolve: userResolver.Update,
 			},
 
-			/* Delete product by id
-			   http://localhost:8080/product?query=mutation+_{delete(id:1){id,name,info,price}}
+			/*
+				curl -g 'http://localhost:8080/graphql?query=mutation+_{deleteUser(id:"2"){id,name,age,country}}'
 			*/
-			"delete": &graphql.Field{
+			"deleteUser": &graphql.Field{
 				Type:        userType,
 				Description: "Delete user by id",
 				Args: graphql.FieldConfigArgument{

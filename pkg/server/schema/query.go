@@ -21,7 +21,7 @@ func newQueryType(userResolver user.UserFieldResolver) *graphql.Object {
 			Name: "Query",
 			Fields: graphql.Fields{
 				/*
-				   curl -g 'http://localhost:8080/graphql?query={user(id:"1"){name}}'
+				   curl -g 'http://localhost:8080/graphql?query={user(id:"1"){name,age,country}}'
 				*/
 				"user": &graphql.Field{
 					Type: userType,

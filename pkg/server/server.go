@@ -58,7 +58,10 @@ func (s *server) Start() error {
 command:
   curl -g 'http://localhost:%d/graphql?query={user(id:"1"){name}}'
   curl -g 'http://localhost:%d/graphql?query={userList{id,name}}'
-`, s.port, s.port)
+  curl -g 'http://localhost:%d/graphql?query=mutation+_{createUser(name:"Tom",age:15,country:"Japan"){id,name,age,country}}'
+  curl -g 'http://localhost:%d/graphql?query=mutation+_{updateUser(id:"1",name:"Dummy",age:99,country:"Japan"){id,name,age,country}}'
+  curl -g 'http://localhost:%d/graphql?query=mutation+_{deleteUser(id:"2""){id,name,age,country}}'
+`, s.port, s.port, s.port, s.port, s.port)
 	http.ListenAndServe(fmt.Sprintf(":%d", s.port), nil)
 
 	return nil
