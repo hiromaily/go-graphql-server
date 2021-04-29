@@ -1,7 +1,7 @@
 package user
 
 type User interface {
-	FetchName(id string) UserType
+	Fetch(id string) UserType
 }
 
 type UserType struct {

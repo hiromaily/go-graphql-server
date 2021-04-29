@@ -50,9 +50,7 @@ func newQueryType(userFetcher user.User) *graphql.Object {
 					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 						idQuery, isOK := p.Args["id"].(string)
 						if isOK {
-							// TODO: call fetch()
-							return userFetcher.FetchName(idQuery), nil
-							// return data[idQuery], nil
+							return userFetcher.Fetch(idQuery), nil
 						}
 						return nil, nil
 					},

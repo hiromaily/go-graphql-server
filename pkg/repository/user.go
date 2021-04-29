@@ -12,7 +12,7 @@ type userMap struct {
 }
 
 func NewUserMapRepo() (user.User, error) {
-	data, err := importJSONDataFromFile("./assets/data.json")
+	data, err := importJSONDataFromFile("./assets/user.json")
 	if err != nil {
 		return nil, err
 	}
@@ -21,7 +21,7 @@ func NewUserMapRepo() (user.User, error) {
 	}, nil
 }
 
-func (u *userMap) FetchName(id string) user.UserType {
+func (u *userMap) Fetch(id string) user.UserType {
 	return u.repo[id]
 }
 
