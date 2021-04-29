@@ -13,7 +13,6 @@ import (
 // Server interface
 type Server interface {
 	Start() error
-	Clean()
 	Close()
 }
 
@@ -63,10 +62,6 @@ command:
 	http.ListenAndServe(fmt.Sprintf(":%d", s.port), nil)
 
 	return nil
-}
-
-// Clean cleans environment
-func (s *server) Clean() {
 }
 
 // Close closes dependencies

@@ -67,5 +67,5 @@ func main() {
 	if err := srv.Start(); err != nil {
 		log.Fatal(err)
 	}
-	srv.Clean()
+	srv.Close()
 }
