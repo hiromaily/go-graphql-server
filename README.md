@@ -19,17 +19,23 @@ make run
 ## available query
 ```
 #  [option] -g, --globoff: Disable URL sequences and ranges using {} and []
+## Query
 curl -g 'http://localhost:8080/graphql?query={user(id:"1"){id,name,age,country}}'
 curl -g 'http://localhost:8080/graphql?query={userList{id,name}}'
+## Mutation
 curl -g 'http://localhost:8080/graphql?query=mutation+_{createUser(name:"Tom",age:15,country:"Japan"){id,name,age,country}}'
 curl -g 'http://localhost:8080/graphql?query=mutation+_{updateUser(id:"1",name:"Dummy",age:99,country:"Japan"){id,name,age,country}}'
 curl -g 'http://localhost:8080/graphql?query=mutation+_{deleteUser(id:"2"){id,name,age,country}}'
+## Introspection
+curl -g 'http://localhost:8080/graphql?query={__schema{types{name}}}'
+curl -g 'http://localhost:8080/graphql?query={__schema{queryType{name}}}'
 ```
+
 
 ## TODO
 - [ ] integrate [graphiql](https://github.com/graphql/graphiql) into server
 - [ ] implement subscriptions
-- [ ] implement Introspection(https://graphql.org/learn/introspection/)
+- [ ] investigate Introspection(https://graphql.org/learn/introspection/) pattern
 - [ ] investigate about [DataLoader](https://github.com/graph-gophers/dataloader)
 - [ ] investigate about [Apollo](https://www.apollographql.com/docs/)
 
