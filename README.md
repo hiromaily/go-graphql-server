@@ -35,6 +35,13 @@ curl -g 'http://localhost:8080/graphql?query={__schema{queryType{fields{name,des
 ```
 
 ## TODO
+- [ ] add unittest
+- [ ] add integration test
+- [ ] return error filed in response when error occurred
+- [ ] use fragment
+- [ ] use onion type
+- [ ] use interface
+- [ ] use query variable
 - [ ] integrate [graphiql](https://github.com/graphql/graphiql) into server
 - [ ] implement subscriptions
 - [ ] investigate Introspection(https://graphql.org/learn/introspection/) pattern
