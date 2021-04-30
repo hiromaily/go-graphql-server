@@ -26,6 +26,14 @@ curl -g 'http://localhost:8080/graphql?query=mutation+_{updateUser(id:"1",name:"
 curl -g 'http://localhost:8080/graphql?query=mutation+_{deleteUser(id:"2"){id,name,age,country}}'
 ```
 
+## TODO
+- [ ] integrate [graphiql](https://github.com/graphql/graphiql) into server
+- [ ] implement subscriptions
+- [ ] implement Introspection(https://graphql.org/learn/introspection/)
+- [ ] investigate about [DataLoader](https://github.com/graph-gophers/dataloader)
+- [ ] investigate about [Apollo](https://www.apollographql.com/docs/)
+
+
 ## References
 - [graphql.org](https://graphql.org/)
 - [tool: graphiql](https://github.com/graphql/graphiql)
