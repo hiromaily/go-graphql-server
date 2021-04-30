@@ -29,8 +29,10 @@ curl -g 'http://localhost:8080/graphql?query=mutation+_{deleteUser(id:"2"){id,na
 ## Introspection
 curl -g 'http://localhost:8080/graphql?query={__schema{types{name}}}'
 curl -g 'http://localhost:8080/graphql?query={__schema{queryType{name}}}'
+curl -g 'http://localhost:8080/graphql?query={__schema{types{name,kind,description}}}'
+### All Available Queries
+curl -g 'http://localhost:8080/graphql?query={__schema{queryType{fields{name,description}}}}'
 ```
-
 
 ## TODO
 - [ ] integrate [graphiql](https://github.com/graphql/graphiql) into server
