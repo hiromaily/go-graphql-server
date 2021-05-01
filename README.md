@@ -47,7 +47,7 @@ curl -g 'http://localhost:8080/graphql?query={__schema{queryType{fields{name,des
 - [ ] investigate Introspection(https://graphql.org/learn/introspection/) pattern
 - [ ] investigate about [DataLoader](https://github.com/graph-gophers/dataloader)
 - [ ] investigate about [Apollo](https://www.apollographql.com/docs/)
-
+- [ ] integrate gRPC connection for micro services
 
 ## References
 - [graphql.org](https://graphql.org/)
