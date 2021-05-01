@@ -1,11 +1,11 @@
 package repository
 
 import (
-	"io/ioutil"
+	"strconv"
 
-	jsoniter "github.com/json-iterator/go"
 	"github.com/pkg/errors"
 
+	"github.com/hiromaily/go-graphql-server/pkg/files"
 	"github.com/hiromaily/go-graphql-server/pkg/user"
 )
 
@@ -16,29 +16,14 @@ type userMap struct {
 
 // NewUserMapRepo returns User interface
 func NewUserMapRepo() (user.User, error) {
-	data, err := importJSONFile("./assets/user.json")
+	var data map[string]user.UserType
+	err := files.ImportJSONFile("./assets/user.json", &data)
 	if err != nil {
 		return nil, err
 	}
 	return &userMap{
 		repo: data,
 	}, nil
-}
-
-// importJSONFile imports json file to map
-func importJSONFile(fileName string) (map[string]user.UserType, error) {
-	var data map[string]user.UserType
-	content, err := ioutil.ReadFile(fileName)
-	if err != nil {
-		return nil, err
-	}
-	// err = json.Unmarshal(content, &data)
-	json := jsoniter.ConfigCompatibleWithStandardLibrary
-	err = json.Unmarshal(content, &data)
-	if err != nil {
-		return nil, err
-	}
-	return data, nil
 }
 
 func (u *userMap) updateList() {
@@ -67,20 +52,22 @@ func (u *userMap) FetchAll() ([]*user.UserType, error) {
 }
 
 func (u *userMap) Insert(ut *user.UserType) error {
-	if _, ok := u.repo[ut.ID]; ok {
-		return errors.Errorf("id[%s] is already existing", ut.ID)
+	id := strconv.Itoa(ut.ID)
+	if _, ok := u.repo[id]; ok {
+		return errors.Errorf("id[%d] is already existing", ut.ID)
 	}
-	u.repo[ut.ID] = *ut
+	u.repo[id] = *ut
 	u.list = append(u.list, ut)
 
 	return nil
 }
 
 func (u *userMap) Update(ut *user.UserType) error {
-	if _, ok := u.repo[ut.ID]; !ok {
-		return errors.Errorf("id[%s] is not found", ut.ID)
+	id := strconv.Itoa(ut.ID)
+	if _, ok := u.repo[id]; !ok {
+		return errors.Errorf("id[%d] is not found", ut.ID)
 	}
-	u.repo[ut.ID] = *ut
+	u.repo[id] = *ut
 	u.updateList()
 
 	return nil

@@ -9,6 +9,7 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"go.uber.org/zap"
 
+	"github.com/hiromaily/go-graphql-server/pkg/country"
 	models "github.com/hiromaily/go-graphql-server/pkg/model/rdb"
 	"github.com/hiromaily/go-graphql-server/pkg/user"
 )
@@ -17,17 +18,16 @@ type userDB struct {
 	dbConn    *sql.DB
 	tableName string
 	logger    *zap.Logger
-	// hash      encryption.Hasher
-	// repo map[string]user.UserType
-	// list []user.UserType
+	country   country.Country
 }
 
 // NewUserDBRepo returns User interface
-func NewUserDBRepo(dbConn *sql.DB, logger *zap.Logger) user.User {
+func NewUserDBRepo(dbConn *sql.DB, logger *zap.Logger, country country.Country) user.User {
 	return &userDB{
 		dbConn:    dbConn,
 		tableName: "t_user",
 		logger:    logger,
+		country:   country,
 	}
 }
 
@@ -65,10 +65,16 @@ func (u *userDB) FetchAll() ([]*user.UserType, error) {
 }
 
 func (u *userDB) Insert(ut *user.UserType) error {
-	// TODO: country
+	// get country
+	countryType, err := u.country.FetchByName(ut.Country)
+	if err != nil {
+		return err
+	}
+
 	item := &models.TUser{
-		Name: ut.Name,
-		Age:  uint8(ut.Age),
+		Name:      ut.Name,
+		Age:       uint8(ut.Age),
+		CountryID: uint8(countryType.ID),
 	}
 
 	ctx := context.Background()

@@ -10,6 +10,7 @@ level = "info" # debug, info, warn, error
 is_stacktrace = false
 
 [mysql]
+is_enabled = true  # true: DB, false: mapDB from json
 host = "127.0.0.1"
 port = 13306
 dbname = "go-graphql"

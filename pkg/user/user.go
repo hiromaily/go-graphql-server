@@ -2,7 +2,6 @@ package user
 
 import (
 	"math/rand"
-	"strconv"
 	"time"
 
 	"github.com/graphql-go/graphql"
@@ -20,9 +19,9 @@ type User interface {
 
 // UserType is type of user
 type UserType struct {
-	ID      string `json:"id"`
-	Name    string `json:"name"`
-	Age     int    `json:"age"`
+	ID      int    `json:"id" boil:"id"`
+	Name    string `json:"name" boil:"name"`
+	Age     int    `json:"age" boil:"age"`
 	Country string `json:"country"`
 }
 
@@ -69,7 +68,7 @@ func (u *userFieldResolver) List(_ graphql.ResolveParams) (interface{}, error) {
 func (u *userFieldResolver) Create(p graphql.ResolveParams) (interface{}, error) {
 	rand.Seed(time.Now().UnixNano())
 	newUser := &UserType{
-		ID:      strconv.Itoa(rand.Intn(100000)), // TODO: get maximum ID
+		ID:      rand.Intn(100000), // TODO: get maximum ID from list
 		Name:    p.Args["name"].(string),
 		Age:     p.Args["age"].(int),
 		Country: p.Args["country"].(string),

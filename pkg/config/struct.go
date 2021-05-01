@@ -6,7 +6,7 @@ import "github.com/hiromaily/go-graphql-server/pkg/server/httpmethod"
 type Root struct {
 	Server *Server `toml:"server" validate:"required"`
 	Logger *Logger `toml:"logger" validate:"required"`
-	MySQL  *MySQL `toml:"mysql"`
+	MySQL  *MySQL  `toml:"mysql"`
 }
 
 // Server is server information
@@ -25,6 +25,7 @@ type Logger struct {
 
 // MySQL is MySQL Server property
 type MySQL struct {
+	IsEnabled  bool   `toml:"is_enabled"`
 	Host       string `toml:"host"`
 	Port       uint16 `toml:"port"`
 	DBName     string `toml:"dbname"`
