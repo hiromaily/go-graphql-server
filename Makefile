@@ -21,6 +21,12 @@ update:
 	GO111MODULE=off go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 	go get -u -d -v ./...
 
+###############################################################################
+# Database ORM
+###############################################################################
+.PHONY: sqlboiler
+sqlboiler:
+	sqlboiler --wipe mysql
 
 ###############################################################################
 # Golang formatter and detection

@@ -1,0 +1,17 @@
+no-hooks = true
+no-tests = true
+output = "./pkg/model/rdb"
+
+[mysql]
+dbname = "go-graphql"
+host = "localhost"
+port = 13306
+user = "root"
+pass = "root"
+sslmode = "false"
+whitelist = [
+    "t_user",
+    "t_company",
+    "t_user_work_history",
+    "m_country"
+]

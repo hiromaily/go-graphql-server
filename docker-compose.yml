@@ -1,0 +1,23 @@
+version: '3.9'
+
+volumes:
+  db: {}
+
+services:
+  # MySQL
+  mysql:
+    #env_file: .env
+    image: mysql:5.7
+    container_name: graphql-mysql
+    ports:
+      - "${MYSQL_PORT:-13306}:3306"
+    volumes:
+      - db:/var/lib/mysql
+      - ./build/docker/mysql/conf.d:/etc/mysql/conf.d
+      - ./build/docker/mysql/init.d:/docker-entrypoint-initdb.d
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: go-graphql
+      MYSQL_USER: guestuser
+      MYSQL_PASSWORD: secret123
