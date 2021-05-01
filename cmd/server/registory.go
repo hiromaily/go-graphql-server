@@ -1,7 +1,10 @@
 package main
 
 import (
+	"database/sql"
 	"github.com/graphql-go/graphql"
+	"github.com/hiromaily/go-graphql-server/pkg/mysql"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"go.uber.org/zap"
 
 	"github.com/hiromaily/go-graphql-server/pkg/config"
@@ -21,6 +24,7 @@ type registry struct {
 	conf     *config.Root
 	logger   *zap.Logger
 	userRepo user.User
+	mysqlClient *sql.DB
 }
 
 // NewRegistry is to register regstry interface
@@ -60,11 +64,31 @@ func (r *registry) newUserFieldResolver() user.UserFieldResolver {
 
 func (r *registry) newUserRepo() user.User {
 	if r.userRepo == nil {
-		repo, err := repository.NewUserMapRepo()
-		if err != nil {
-			panic(err)
-		}
+		// using DB
+		repo := repository.NewUserDBRepo(
+			r.newMySQLClient(),
+			r.newLogger(),
+		)
+		// map pattern
+		//repo, err := repository.NewUserMapRepo()
+		//if err != nil {
+		//	panic(err)
+		//}
 		r.userRepo = repo
 	}
 	return r.userRepo
+}
+
+func (r *registry) newMySQLClient() *sql.DB {
+	if r.mysqlClient == nil {
+		dbConn, err := mysql.NewMySQL(r.conf.MySQL)
+		if err != nil {
+			panic(err)
+		}
+		r.mysqlClient = dbConn
+		if r.conf.MySQL.IsDebugLog {
+			boil.DebugMode = true
+		}
+	}
+	return r.mysqlClient
 }

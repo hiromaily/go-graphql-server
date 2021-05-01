@@ -7,6 +7,7 @@ require (
 	github.com/ericlagergren/decimal v0.0.0-20210307182354-5f8425a47c58 // indirect
 	github.com/friendsofgo/errors v0.9.2
 	github.com/go-playground/validator/v10 v10.5.0
+	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/gofrs/uuid v4.0.0+incompatible // indirect
 	github.com/graphql-go/graphql v0.7.9
 	github.com/json-iterator/go v1.1.11

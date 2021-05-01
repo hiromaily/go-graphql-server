@@ -8,3 +8,11 @@ service = "graphql-server"
 env = "custom" # dev, prod, custom :for only zap logger
 level = "info" # debug, info, warn, error
 is_stacktrace = false
+
+[mysql]
+host = "127.0.0.1"
+port = 13306
+dbname = "go-graphql"
+user = "guestuser"
+pass = "secret123"
+is_debug_log = true
