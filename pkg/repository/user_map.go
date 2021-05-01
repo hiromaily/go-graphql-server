@@ -11,7 +11,7 @@ import (
 
 type userMap struct {
 	repo map[string]user.UserType
-	list []user.UserType
+	list []*user.UserType
 }
 
 // NewUserMapRepo returns User interface
@@ -42,41 +42,45 @@ func importJSONFile(fileName string) (map[string]user.UserType, error) {
 }
 
 func (u *userMap) updateList() {
-	utList := make([]user.UserType, 0, len(u.repo))
+	utList := make([]*user.UserType, 0, len(u.repo))
 	for _, val := range u.repo {
-		utList = append(utList, val)
+		val := val
+		utList = append(utList, &val)
 	}
 	u.list = utList
 }
 
 // Fetch returns user by id
-func (u *userMap) Fetch(id string) user.UserType {
-	return u.repo[id]
+func (u *userMap) Fetch(id string) (*user.UserType, error) {
+	if v, ok := u.repo[id]; ok {
+		return &v, nil
+	}
+	return nil, errors.New("user is not found")
 }
 
 // FetchAll returns all users
-func (u *userMap) FetchAll() []user.UserType {
+func (u *userMap) FetchAll() ([]*user.UserType, error) {
 	if len(u.list) == 0 {
 		u.updateList()
 	}
-	return u.list
+	return u.list, nil
 }
 
-func (u *userMap) Insert(ut user.UserType) error {
+func (u *userMap) Insert(ut *user.UserType) error {
 	if _, ok := u.repo[ut.ID]; ok {
 		return errors.Errorf("id[%s] is already existing", ut.ID)
 	}
-	u.repo[ut.ID] = ut
+	u.repo[ut.ID] = *ut
 	u.list = append(u.list, ut)
 
 	return nil
 }
 
-func (u *userMap) Update(ut user.UserType) error {
+func (u *userMap) Update(ut *user.UserType) error {
 	if _, ok := u.repo[ut.ID]; !ok {
 		return errors.Errorf("id[%s] is not found", ut.ID)
 	}
-	u.repo[ut.ID] = ut
+	u.repo[ut.ID] = *ut
 	u.updateList()
 
 	return nil

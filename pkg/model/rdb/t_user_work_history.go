@@ -71,18 +71,23 @@ type whereHelpertypes_JSON struct{ field string }
 func (w whereHelpertypes_JSON) EQ(x types.JSON) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.EQ, x)
 }
+
 func (w whereHelpertypes_JSON) NEQ(x types.JSON) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.NEQ, x)
 }
+
 func (w whereHelpertypes_JSON) LT(x types.JSON) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.LT, x)
 }
+
 func (w whereHelpertypes_JSON) LTE(x types.JSON) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.LTE, x)
 }
+
 func (w whereHelpertypes_JSON) GT(x types.JSON) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.GT, x)
 }
+
 func (w whereHelpertypes_JSON) GTE(x types.JSON) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.GTE, x)
 }
@@ -323,7 +328,6 @@ func (o *TUserWorkHistory) Insert(ctx context.Context, exec boil.ContextExecutor
 		fmt.Fprintln(writer, vals)
 	}
 	result, err := exec.ExecContext(ctx, cache.query, vals...)
-
 	if err != nil {
 		return errors.Wrap(err, "models: unable to insert into t_user_work_history")
 	}
@@ -603,7 +607,6 @@ func (o *TUserWorkHistory) Upsert(ctx context.Context, exec boil.ContextExecutor
 		fmt.Fprintln(writer, vals)
 	}
 	result, err := exec.ExecContext(ctx, cache.query, vals...)
-
 	if err != nil {
 		return errors.Wrap(err, "models: unable to upsert for t_user_work_history")
 	}

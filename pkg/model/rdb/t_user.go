@@ -281,7 +281,6 @@ func (o *TUser) Insert(ctx context.Context, exec boil.ContextExecutor, columns b
 		fmt.Fprintln(writer, vals)
 	}
 	result, err := exec.ExecContext(ctx, cache.query, vals...)
-
 	if err != nil {
 		return errors.Wrap(err, "models: unable to insert into t_user")
 	}
@@ -561,7 +560,6 @@ func (o *TUser) Upsert(ctx context.Context, exec boil.ContextExecutor, updateCol
 		fmt.Fprintln(writer, vals)
 	}
 	result, err := exec.ExecContext(ctx, cache.query, vals...)
-
 	if err != nil {
 		return errors.Wrap(err, "models: unable to upsert for t_user")
 	}

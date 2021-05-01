@@ -11,10 +11,10 @@ import (
 
 // User for fetching data interface
 type User interface {
-	Fetch(id string) UserType
-	FetchAll() []UserType
-	Insert(ut UserType) error
-	Update(ut UserType) error
+	Fetch(id string) (*UserType, error)
+	FetchAll() ([]*UserType, error)
+	Insert(ut *UserType) error
+	Update(ut *UserType) error
 	Delete(id string)
 }
 
@@ -55,20 +55,20 @@ func NewUserFieldResolve(
 func (u *userFieldResolver) GetByID(p graphql.ResolveParams) (interface{}, error) {
 	idQuery, isOK := p.Args["id"].(string)
 	if isOK {
-		return u.userRepo.Fetch(idQuery), nil
+		return u.userRepo.Fetch(idQuery)
 	}
 	return nil, nil
 }
 
 // UserList returns all users
 func (u *userFieldResolver) List(_ graphql.ResolveParams) (interface{}, error) {
-	return u.userRepo.FetchAll(), nil
+	return u.userRepo.FetchAll()
 }
 
 // Create creates new user by parameters
 func (u *userFieldResolver) Create(p graphql.ResolveParams) (interface{}, error) {
 	rand.Seed(time.Now().UnixNano())
-	newUser := UserType{
+	newUser := &UserType{
 		ID:      strconv.Itoa(rand.Intn(100000)), // TODO: get maximum ID
 		Name:    p.Args["name"].(string),
 		Age:     p.Args["age"].(int),
@@ -84,7 +84,10 @@ func (u *userFieldResolver) Create(p graphql.ResolveParams) (interface{}, error)
 
 func (u *userFieldResolver) Update(p graphql.ResolveParams) (interface{}, error) {
 	id, _ := p.Args["id"].(string)
-	updated := u.userRepo.Fetch(id)
+	updated, err := u.userRepo.Fetch(id)
+	if err != nil {
+		return nil, err
+	}
 
 	if name, ok := p.Args["name"].(string); ok {
 		updated.Name = name
@@ -104,7 +107,10 @@ func (u *userFieldResolver) Update(p graphql.ResolveParams) (interface{}, error)
 
 func (u *userFieldResolver) Delete(p graphql.ResolveParams) (interface{}, error) {
 	id, _ := p.Args["id"].(string)
-	deleted := u.userRepo.Fetch(id)
+	deleted, err := u.userRepo.Fetch(id)
+	if err != nil {
+		return nil, err
+	}
 	u.userRepo.Delete(id)
 
 	return deleted, nil

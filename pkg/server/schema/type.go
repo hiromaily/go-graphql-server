@@ -36,7 +36,6 @@ import (
 //
 // empty list `[]` is recommended to return when no value
 
-
 /*
    Create User object type with fields "id" and "name" by using GraphQLObjectTypeConfig:
        - Name: name of object type
@@ -105,4 +104,3 @@ var companyType = graphql.NewObject(
 		},
 	},
 )
-

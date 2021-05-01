@@ -65,6 +65,7 @@ func (w whereHelperint16) IN(slice []int16) qm.QueryMod {
 	}
 	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
 }
+
 func (w whereHelperint16) NIN(slice []int16) qm.QueryMod {
 	values := make([]interface{}, 0, len(slice))
 	for _, value := range slice {
@@ -88,6 +89,7 @@ func (w whereHelperstring) IN(slice []string) qm.QueryMod {
 	}
 	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
 }
+
 func (w whereHelperstring) NIN(slice []string) qm.QueryMod {
 	values := make([]interface{}, 0, len(slice))
 	for _, value := range slice {
@@ -101,6 +103,7 @@ type whereHelpernull_Time struct{ field string }
 func (w whereHelpernull_Time) EQ(x null.Time) qm.QueryMod {
 	return qmhelper.WhereNullEQ(w.field, false, x)
 }
+
 func (w whereHelpernull_Time) NEQ(x null.Time) qm.QueryMod {
 	return qmhelper.WhereNullEQ(w.field, true, x)
 }
@@ -109,12 +112,15 @@ func (w whereHelpernull_Time) IsNotNull() qm.QueryMod { return qmhelper.WhereIsN
 func (w whereHelpernull_Time) LT(x null.Time) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.LT, x)
 }
+
 func (w whereHelpernull_Time) LTE(x null.Time) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.LTE, x)
 }
+
 func (w whereHelpernull_Time) GT(x null.Time) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.GT, x)
 }
+
 func (w whereHelpernull_Time) GTE(x null.Time) qm.QueryMod {
 	return qmhelper.Where(w.field, qmhelper.GTE, x)
 }
@@ -345,7 +351,6 @@ func (o *MCountry) Insert(ctx context.Context, exec boil.ContextExecutor, column
 		fmt.Fprintln(writer, vals)
 	}
 	result, err := exec.ExecContext(ctx, cache.query, vals...)
-
 	if err != nil {
 		return errors.Wrap(err, "models: unable to insert into m_country")
 	}
@@ -625,7 +630,6 @@ func (o *MCountry) Upsert(ctx context.Context, exec boil.ContextExecutor, update
 		fmt.Fprintln(writer, vals)
 	}
 	result, err := exec.ExecContext(ctx, cache.query, vals...)
-
 	if err != nil {
 		return errors.Wrap(err, "models: unable to upsert for m_country")
 	}

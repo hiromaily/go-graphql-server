@@ -65,6 +65,7 @@ func (w whereHelperint) IN(slice []int) qm.QueryMod {
 	}
 	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
 }
+
 func (w whereHelperint) NIN(slice []int) qm.QueryMod {
 	values := make([]interface{}, 0, len(slice))
 	for _, value := range slice {
@@ -88,6 +89,7 @@ func (w whereHelperuint8) IN(slice []uint8) qm.QueryMod {
 	}
 	return qm.WhereIn(fmt.Sprintf("%s IN ?", w.field), values...)
 }
+
 func (w whereHelperuint8) NIN(slice []uint8) qm.QueryMod {
 	values := make([]interface{}, 0, len(slice))
 	for _, value := range slice {
@@ -322,7 +324,6 @@ func (o *TCompany) Insert(ctx context.Context, exec boil.ContextExecutor, column
 		fmt.Fprintln(writer, vals)
 	}
 	result, err := exec.ExecContext(ctx, cache.query, vals...)
-
 	if err != nil {
 		return errors.Wrap(err, "models: unable to insert into t_company")
 	}
@@ -602,7 +603,6 @@ func (o *TCompany) Upsert(ctx context.Context, exec boil.ContextExecutor, update
 		fmt.Fprintln(writer, vals)
 	}
 	result, err := exec.ExecContext(ctx, cache.query, vals...)
-
 	if err != nil {
 		return errors.Wrap(err, "models: unable to upsert for t_company")
 	}
