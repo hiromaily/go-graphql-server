@@ -55,6 +55,7 @@ func (r *registry) newLogger() *zap.Logger {
 func (r *registry) newSchema() graphql.Schema {
 	return schema.NewSchema(
 		r.newUserFieldResolver(),
+		r.newCountryFieldResolver(),
 	)
 }
 
@@ -62,6 +63,13 @@ func (r *registry) newUserFieldResolver() user.UserFieldResolver {
 	return user.NewUserFieldResolve(
 		r.newLogger(),
 		r.newUserRepo(),
+	)
+}
+
+func (r *registry) newCountryFieldResolver() country.CountryFieldResolver {
+	return country.NewCountryFieldResolve(
+		r.newLogger(),
+		r.newCountryRepo(),
 	)
 }
 

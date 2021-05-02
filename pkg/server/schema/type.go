@@ -47,7 +47,7 @@ var userType = graphql.NewObject(
 		Name: "User",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
-				Type: graphql.NewNonNull(graphql.String),
+				Type: graphql.NewNonNull(graphql.Int),
 			},
 			"name": &graphql.Field{
 				Type: graphql.String,
@@ -70,7 +70,7 @@ var workHistoryType = graphql.NewObject(
 		Name: "WorkHisotry",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
-				Type: graphql.NewNonNull(graphql.String),
+				Type: graphql.NewNonNull(graphql.Int),
 			},
 			"company": &graphql.Field{
 				Type: companyType,
@@ -99,6 +99,23 @@ var companyType = graphql.NewObject(
 				Type: graphql.String,
 			},
 			"country": &graphql.Field{
+				Type: graphql.String,
+			},
+		},
+	},
+)
+
+var countryType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "Country",
+		Fields: graphql.Fields{
+			"id": &graphql.Field{
+				Type: graphql.NewNonNull(graphql.Int),
+			},
+			"country_code": &graphql.Field{
+				Type: graphql.String,
+			},
+			"name": &graphql.Field{
 				Type: graphql.String,
 			},
 		},
