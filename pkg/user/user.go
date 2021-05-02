@@ -2,6 +2,7 @@ package user
 
 import (
 	"math/rand"
+	"strconv"
 	"time"
 
 	"github.com/graphql-go/graphql"
@@ -59,7 +60,7 @@ func (u *userFieldResolver) GetByID(p graphql.ResolveParams) (interface{}, error
 	return nil, nil
 }
 
-// UserList returns all users
+// List returns all users
 func (u *userFieldResolver) List(_ graphql.ResolveParams) (interface{}, error) {
 	return u.userRepo.FetchAll()
 }
@@ -83,9 +84,16 @@ func (u *userFieldResolver) Create(p graphql.ResolveParams) (interface{}, error)
 
 func (u *userFieldResolver) Update(p graphql.ResolveParams) (interface{}, error) {
 	id, _ := p.Args["id"].(string)
-	updated, err := u.userRepo.Fetch(id)
+	intID, err := strconv.Atoi(id)
 	if err != nil {
 		return nil, err
+	}
+	//updated, err := u.userRepo.Fetch(id)
+	//if err != nil {
+	//	return nil, err
+	//}
+	updated := UserType{
+		ID: intID,
 	}
 
 	if name, ok := p.Args["name"].(string); ok {
@@ -97,7 +105,7 @@ func (u *userFieldResolver) Update(p graphql.ResolveParams) (interface{}, error)
 	if country, ok := p.Args["country"].(string); ok {
 		updated.Country = country
 	}
-	if err := u.userRepo.Update(updated); err != nil {
+	if err := u.userRepo.Update(&updated); err != nil {
 		return nil, err
 	}
 

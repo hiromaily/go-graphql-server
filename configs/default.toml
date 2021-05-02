@@ -6,7 +6,7 @@ http_method = "GET" # GET, POST
 [logger]
 service = "graphql-server"
 env = "custom" # dev, prod, custom :for only zap logger
-level = "info" # debug, info, warn, error
+level = "debug" # debug, info, warn, error
 is_stacktrace = false
 
 [mysql]

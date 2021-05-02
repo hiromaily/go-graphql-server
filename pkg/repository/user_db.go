@@ -3,9 +3,10 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"strconv"
+	"time"
 
 	"github.com/pkg/errors"
+	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"go.uber.org/zap"
@@ -37,21 +38,14 @@ func (u *userDB) Fetch(id string) (*user.UserType, error) {
 	ctx := context.Background()
 
 	var user user.UserType
-	intID, err := strconv.Atoi(id)
-	if err != nil {
-		return nil, err
-	}
-	u.logger.Debug("userdb.fetch 1")
-	err = models.TUsers(
+	err := models.TUsers(
 		qm.Select("t_user.id, t_user.name, t_user.age, cty.name as country"),
 		qm.LeftOuterJoin("m_country as cty on t_user.country_id = cty.id"),
-		qm.Where("t_user.id=?", intID),
+		qm.Where("t_user.id=?", id),
 	).Bind(ctx, u.dbConn, &user)
-	u.logger.Debug("userdb.fetch 2")
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to call models.TUsers().Bind() in Fetch()")
 	}
-	u.logger.Debug("userdb.fetch", zap.Any("user", user))
 
 	return &user, nil
 }
@@ -94,9 +88,31 @@ func (u *userDB) Insert(ut *user.UserType) error {
 	return nil
 }
 
-// TODO: implement
 func (u *userDB) Update(ut *user.UserType) error {
-	return nil
+	ctx := context.Background()
+
+	// Set updating columns
+	updCols := map[string]interface{}{}
+	if ut.Name != "" {
+		updCols[models.TUserColumns.Name] = ut.Name
+	}
+	if ut.Age != 0 {
+		updCols[models.TUserColumns.Age] = ut.Age
+	}
+	if ut.Country != "" {
+		ct, err := u.country.FetchByName(ut.Country)
+		if err != nil {
+			return err
+		}
+		updCols[models.TUserColumns.CountryID] = ct.ID
+	}
+	updCols[models.TUserColumns.UpdatedAt] = null.TimeFrom(time.Now().UTC())
+
+	_, err := models.TUsers(
+		qm.Where("id=?", ut.ID),
+	).UpdateAll(ctx, u.dbConn, updCols)
+
+	return err
 }
 
 // TODO: implement
