@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/graphql-go/graphql"
+	"github.com/pkg/errors"
 	"go.uber.org/zap"
 )
 
@@ -57,7 +58,7 @@ func (u *userFieldResolver) GetByID(p graphql.ResolveParams) (interface{}, error
 	if isOK {
 		return u.userRepo.Fetch(idQuery)
 	}
-	return nil, nil
+	return nil, errors.New("not found")
 }
 
 // List returns all users

@@ -69,6 +69,8 @@ command:
   curl -g 'http://localhost:%d/graphql?query=mutation+_{createUser(name:"Tom",age:15,country:"Japan"){id,name,age,country}}'
   curl -g 'http://localhost:%d/graphql?query=mutation+_{updateUser(id:"1",name:"Dummy",age:99,country:"Japan"){id,name,age,country}}'
   curl -g 'http://localhost:%d/graphql?query=mutation+_{deleteUser(id:"2"){id,name,age,country}}'
+  curl -g 'http://localhost:8080/graphql?query={country(id:"1"){name,name,code}}'
+  curl -g 'http://localhost:8080/graphql?query={countryList{id,name}}'
 `, s.port, s.port, s.port, s.port, s.port)
 	http.ListenAndServe(fmt.Sprintf(":%d", s.port), nil)
 

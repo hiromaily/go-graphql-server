@@ -2,6 +2,7 @@ package country
 
 import (
 	"github.com/graphql-go/graphql"
+	"github.com/pkg/errors"
 	"go.uber.org/zap"
 )
 
@@ -47,7 +48,7 @@ func (c *countryFieldResolver) GetByID(p graphql.ResolveParams) (interface{}, er
 	if isOK {
 		return c.countryRepo.Fetch(idQuery)
 	}
-	return nil, nil
+	return nil, errors.New("not found")
 }
 
 // List returns all countries

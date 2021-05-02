@@ -112,10 +112,10 @@ var countryType = graphql.NewObject(
 			"id": &graphql.Field{
 				Type: graphql.NewNonNull(graphql.Int),
 			},
-			"country_code": &graphql.Field{
+			"name": &graphql.Field{
 				Type: graphql.String,
 			},
-			"name": &graphql.Field{
+			"code": &graphql.Field{
 				Type: graphql.String,
 			},
 		},

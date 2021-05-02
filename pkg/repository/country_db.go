@@ -31,16 +31,16 @@ func NewCountryDBRepo(dbConn *sql.DB, logger *zap.Logger) country.Country {
 func (c *countryDB) Fetch(id string) (*country.CountryType, error) {
 	ctx := context.Background()
 
-	var country *country.CountryType
+	var country country.CountryType
 	err := models.MCountries(
 		qm.Select("id, country_code, name"),
 		qm.Where("id=?", id),
-	).Bind(ctx, c.dbConn, country)
+	).Bind(ctx, c.dbConn, &country)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to call models.MCountries().Bind() in Fetch()")
 	}
 
-	return country, nil
+	return &country, nil
 }
 
 // FetchByName returns country by name

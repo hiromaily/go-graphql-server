@@ -45,7 +45,7 @@ func newQueryType(
 					Resolve:     userResolver.List,
 				},
 				/*
-				   curl -g 'http://localhost:8080/graphql?query={user(id:"1"){name,age,country}}'
+				   curl -g 'http://localhost:8080/graphql?query={country(id:"1"){name,name,code}}'
 				*/
 				"country": &graphql.Field{
 					Type: countryType,
@@ -55,6 +55,14 @@ func newQueryType(
 						},
 					},
 					Resolve: countryResolver.GetByID,
+				},
+				/*
+				   curl -g 'http://localhost:8080/graphql?query={countryList{id,name}}'
+				*/
+				"countryList": &graphql.Field{
+					Type:        graphql.NewList(countryType),
+					Description: "List of country",
+					Resolve:     countryResolver.List,
 				},
 			},
 		},
