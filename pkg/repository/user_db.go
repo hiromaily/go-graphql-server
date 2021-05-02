@@ -116,5 +116,11 @@ func (u *userDB) Update(ut *user.UserType) error {
 }
 
 // TODO: implement
-func (u *userDB) Delete(id string) {
+func (u *userDB) Delete(id string) error {
+	ctx := context.Background()
+
+	_, err := models.TUsers(
+		qm.Where("t_user.id=?", id),
+	).DeleteAll(ctx, u.dbConn)
+	return err
 }

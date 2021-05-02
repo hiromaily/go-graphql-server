@@ -15,7 +15,7 @@ type User interface {
 	FetchAll() ([]*UserType, error)
 	Insert(ut *UserType) error
 	Update(ut *UserType) error
-	Delete(id string)
+	Delete(id string) error
 }
 
 // UserType is type of user

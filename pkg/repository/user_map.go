@@ -73,7 +73,8 @@ func (u *userMap) Update(ut *user.UserType) error {
 	return nil
 }
 
-func (u *userMap) Delete(id string) {
+func (u *userMap) Delete(id string) error {
 	delete(u.repo, id)
 	u.updateList()
+	return nil
 }
