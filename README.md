@@ -37,7 +37,6 @@ curl -g 'http://localhost:8080/graphql?query={__schema{queryType{fields{name,des
 ## TODO
 - [ ] add unittest
 - [ ] add integration test
-- [x] return error filed in response when error occurred
 - [ ] how to sort response data??
 - [ ] use fragment
 - [ ] use onion type
@@ -45,10 +44,11 @@ curl -g 'http://localhost:8080/graphql?query={__schema{queryType{fields{name,des
 - [ ] use query variable
 - [ ] integrate [graphiql](https://github.com/graphql/graphiql) into server
 - [ ] implement subscriptions
-- [ ] investigate Introspection(https://graphql.org/learn/introspection/) pattern
 - [ ] investigate about [DataLoader](https://github.com/graph-gophers/dataloader)
 - [ ] investigate about [Apollo](https://www.apollographql.com/docs/)
 - [ ] integrate gRPC connection for micro services
+- [x] return error filed in response when error occurred
+- [x] investigate Introspection(https://graphql.org/learn/introspection/) pattern
 
 ## References
 - [graphql.org](https://graphql.org/)

@@ -67,6 +67,16 @@ func (u *userMap) Update(ut *user.UserType) error {
 	if _, ok := u.repo[id]; !ok {
 		return errors.Errorf("id[%d] is not found", ut.ID)
 	}
+	updated, err := u.Fetch(id)
+	if err != nil {
+		return err
+	}
+	if ut.Name == "" {
+		ut.Name = updated.Name
+	}
+	if ut.Age == 0 {
+		ut.Age = updated.Age
+	}
 	u.repo[id] = *ut
 	u.updateList()
 

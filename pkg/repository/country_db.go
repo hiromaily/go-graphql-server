@@ -64,7 +64,6 @@ func (c *countryDB) FetchAll() ([]*country.CountryType, error) {
 	ctx := context.Background()
 
 	var countries []*country.CountryType
-	// sql := "SELECT id FROM t_users WHERE delete_flg=?"
 	err := models.MCountries(
 		qm.Select("id, country_code, name"),
 	).Bind(ctx, c.dbConn, &countries)

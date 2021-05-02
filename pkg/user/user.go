@@ -88,10 +88,6 @@ func (u *userFieldResolver) Update(p graphql.ResolveParams) (interface{}, error)
 	if err != nil {
 		return nil, err
 	}
-	//updated, err := u.userRepo.Fetch(id)
-	//if err != nil {
-	//	return nil, err
-	//}
 	updated := UserType{
 		ID: intID,
 	}
