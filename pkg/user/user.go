@@ -22,7 +22,7 @@ type UserType struct {
 	ID      int    `json:"id" boil:"id"`
 	Name    string `json:"name" boil:"name"`
 	Age     int    `json:"age" boil:"age"`
-	Country string `json:"country"`
+	Country string `json:"country" boil:"country"`
 }
 
 // UserFieldResolver for resolver of schema interface

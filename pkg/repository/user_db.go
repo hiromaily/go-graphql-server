@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"strconv"
 
 	"github.com/pkg/errors"
 	"github.com/volatiletech/sqlboiler/v4/boil"
@@ -35,17 +36,24 @@ func NewUserDBRepo(dbConn *sql.DB, logger *zap.Logger, country country.Country) 
 func (u *userDB) Fetch(id string) (*user.UserType, error) {
 	ctx := context.Background()
 
-	var user *user.UserType
-	err := models.TUsers(
-		qm.Select("t_user.id, t_user.name, t_user.age, cty.name"),
-		qm.LeftOuterJoin("m_country as cty on t_user.country_id = cty.id"),
-		qm.Where("id=?", id),
-	).Bind(ctx, u.dbConn, user)
+	var user user.UserType
+	intID, err := strconv.Atoi(id)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to call models.TUsers().Bind()")
+		return nil, err
 	}
+	u.logger.Debug("userdb.fetch 1")
+	err = models.TUsers(
+		qm.Select("t_user.id, t_user.name, t_user.age, cty.name as country"),
+		qm.LeftOuterJoin("m_country as cty on t_user.country_id = cty.id"),
+		qm.Where("t_user.id=?", intID),
+	).Bind(ctx, u.dbConn, &user)
+	u.logger.Debug("userdb.fetch 2")
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to call models.TUsers().Bind() in Fetch()")
+	}
+	u.logger.Debug("userdb.fetch", zap.Any("user", user))
 
-	return user, nil
+	return &user, nil
 }
 
 // FetchAll returns all users
@@ -55,11 +63,11 @@ func (u *userDB) FetchAll() ([]*user.UserType, error) {
 	var users []*user.UserType
 	// sql := "SELECT id FROM t_users WHERE delete_flg=?"
 	err := models.TUsers(
-		qm.Select("t_user.id, t_user.name, t_user.age, cty.name"),
+		qm.Select("t_user.id, t_user.name, t_user.age, cty.name as country"),
 		qm.LeftOuterJoin("m_country as cty on t_user.country_id = cty.id"),
 	).Bind(ctx, u.dbConn, &users)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to call models.TUsers().Bind()")
+		return nil, errors.Wrap(err, "failed to call models.TUsers().Bind() in FetchAll()")
 	}
 	return users, nil
 }

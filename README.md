@@ -18,7 +18,7 @@ make run
 
 ## available query
 ```
-#  [option] -g, --globoff: Disable URL sequences and ranges using {} and []
+#  curl [option] -g, --globoff: Disable URL sequences and ranges using {} and []
 ## Query
 curl -g 'http://localhost:8080/graphql?query={user(id:"1"){id,name,age,country}}'
 curl -g 'http://localhost:8080/graphql?query={userList{id,name}}'
@@ -37,7 +37,8 @@ curl -g 'http://localhost:8080/graphql?query={__schema{queryType{fields{name,des
 ## TODO
 - [ ] add unittest
 - [ ] add integration test
-- [ ] return error filed in response when error occurred
+- [x] return error filed in response when error occurred
+- [ ] how to sort response data??
 - [ ] use fragment
 - [ ] use onion type
 - [ ] use interface

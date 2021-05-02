@@ -37,7 +37,7 @@ func (c *countryDB) Fetch(id string) (*country.CountryType, error) {
 		qm.Where("id=?", id),
 	).Bind(ctx, c.dbConn, country)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to call models.MCountries().Bind()")
+		return nil, errors.Wrap(err, "failed to call models.MCountries().Bind() in Fetch()")
 	}
 
 	return country, nil
@@ -47,16 +47,16 @@ func (c *countryDB) Fetch(id string) (*country.CountryType, error) {
 func (c *countryDB) FetchByName(name string) (*country.CountryType, error) {
 	ctx := context.Background()
 
-	var country *country.CountryType
+	var country country.CountryType
 	err := models.MCountries(
 		qm.Select("id, country_code, name"),
 		qm.Where("name=?", name),
-	).Bind(ctx, c.dbConn, country)
+	).Bind(ctx, c.dbConn, &country)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to call models.MCountries().Bind()")
+		return nil, errors.Wrap(err, "failed to call models.MCountries().Bind() in FetchByName()")
 	}
 
-	return country, nil
+	return &country, nil
 }
 
 // FetchAll returns all countries
@@ -69,7 +69,7 @@ func (c *countryDB) FetchAll() ([]*country.CountryType, error) {
 		qm.Select("id, country_code, name"),
 	).Bind(ctx, c.dbConn, &countries)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to call models.MCountries().Bind()")
+		return nil, errors.Wrap(err, "failed to call models.MCountries().Bind() in FetchAll()")
 	}
 	return countries, nil
 }
