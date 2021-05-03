@@ -50,7 +50,7 @@ func newQueryType(
 				   curl -g 'http://localhost:8080/graphql?query={company(id:"1"){id,name,country}}'
 				*/
 				"company": &graphql.Field{
-					Type: countryType,
+					Type: companyType,
 					Args: graphql.FieldConfigArgument{
 						"id": &graphql.ArgumentConfig{
 							Type: graphql.String,
