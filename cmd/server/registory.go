@@ -13,8 +13,8 @@ import (
 	"github.com/hiromaily/go-graphql-server/pkg/model/user"
 	"github.com/hiromaily/go-graphql-server/pkg/mysql"
 	"github.com/hiromaily/go-graphql-server/pkg/repository"
+	"github.com/hiromaily/go-graphql-server/pkg/schema"
 	"github.com/hiromaily/go-graphql-server/pkg/server"
-	"github.com/hiromaily/go-graphql-server/pkg/server/schema"
 )
 
 // Registry interface
