@@ -8,7 +8,7 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"go.uber.org/zap"
 
-	"github.com/hiromaily/go-graphql-server/pkg/country"
+	"github.com/hiromaily/go-graphql-server/pkg/model/country"
 	models "github.com/hiromaily/go-graphql-server/pkg/model/rdb"
 )
 

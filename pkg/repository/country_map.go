@@ -3,8 +3,8 @@ package repository
 import (
 	"github.com/pkg/errors"
 
-	"github.com/hiromaily/go-graphql-server/pkg/country"
 	"github.com/hiromaily/go-graphql-server/pkg/files"
+	"github.com/hiromaily/go-graphql-server/pkg/model/country"
 )
 
 type countryMap struct {

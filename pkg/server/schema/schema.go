@@ -3,8 +3,8 @@ package schema
 import (
 	"github.com/graphql-go/graphql"
 
-	"github.com/hiromaily/go-graphql-server/pkg/country"
-	"github.com/hiromaily/go-graphql-server/pkg/user"
+	"github.com/hiromaily/go-graphql-server/pkg/model/country"
+	"github.com/hiromaily/go-graphql-server/pkg/model/user"
 )
 
 // NewSchema returns graphql.Schema

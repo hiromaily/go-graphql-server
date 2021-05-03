@@ -8,13 +8,13 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/hiromaily/go-graphql-server/pkg/config"
-	"github.com/hiromaily/go-graphql-server/pkg/country"
 	"github.com/hiromaily/go-graphql-server/pkg/logger"
+	"github.com/hiromaily/go-graphql-server/pkg/model/country"
+	"github.com/hiromaily/go-graphql-server/pkg/model/user"
 	"github.com/hiromaily/go-graphql-server/pkg/mysql"
 	"github.com/hiromaily/go-graphql-server/pkg/repository"
 	"github.com/hiromaily/go-graphql-server/pkg/server"
 	"github.com/hiromaily/go-graphql-server/pkg/server/schema"
-	"github.com/hiromaily/go-graphql-server/pkg/user"
 )
 
 // Registry interface

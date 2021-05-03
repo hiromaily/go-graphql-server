@@ -3,7 +3,7 @@ package schema
 import (
 	"github.com/graphql-go/graphql"
 
-	"github.com/hiromaily/go-graphql-server/pkg/user"
+	"github.com/hiromaily/go-graphql-server/pkg/model/user"
 )
 
 func newMutationType(userResolver user.UserFieldResolver) *graphql.Object {

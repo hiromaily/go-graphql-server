@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/hiromaily/go-graphql-server/pkg/files"
-	"github.com/hiromaily/go-graphql-server/pkg/user"
+	"github.com/hiromaily/go-graphql-server/pkg/model/user"
 )
 
 type userMap struct {
