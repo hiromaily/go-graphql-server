@@ -11,6 +11,7 @@ import (
 )
 
 // User for fetching data interface
+// - implementation is in repository
 type User interface {
 	Fetch(id string) (*UserType, error)
 	FetchAll() ([]*UserType, error)
@@ -70,7 +71,7 @@ func (u *userFieldResolver) List(_ graphql.ResolveParams) (interface{}, error) {
 func (u *userFieldResolver) Create(p graphql.ResolveParams) (interface{}, error) {
 	rand.Seed(time.Now().UnixNano())
 	newUser := &UserType{
-		ID:      rand.Intn(100000), // TODO: get maximum ID from list
+		ID:      rand.Intn(100000), // TODO: get maximum ID from list for only map
 		Name:    p.Args["name"].(string),
 		Age:     p.Args["age"].(int),
 		Country: p.Args["country"].(string),

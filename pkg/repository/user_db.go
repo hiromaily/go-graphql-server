@@ -55,7 +55,6 @@ func (u *userDB) FetchAll() ([]*user.UserType, error) {
 	ctx := context.Background()
 
 	var users []*user.UserType
-	// sql := "SELECT id FROM t_users WHERE delete_flg=?"
 	err := models.TUsers(
 		qm.Select("t_user.id, t_user.name, t_user.age, cty.name as country"),
 		qm.LeftOuterJoin("m_country as cty on t_user.country_id = cty.id"),
@@ -115,7 +114,6 @@ func (u *userDB) Update(ut *user.UserType) error {
 	return err
 }
 
-// TODO: implement
 func (u *userDB) Delete(id string) error {
 	ctx := context.Background()
 

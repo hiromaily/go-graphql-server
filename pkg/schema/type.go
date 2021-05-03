@@ -90,12 +90,9 @@ var companyType = graphql.NewObject(
 		Name: "Company",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
-				Type: graphql.NewNonNull(graphql.String),
+				Type: graphql.NewNonNull(graphql.Int),
 			},
 			"name": &graphql.Field{
-				Type: graphql.String,
-			},
-			"description": &graphql.Field{
 				Type: graphql.String,
 			},
 			"country": &graphql.Field{

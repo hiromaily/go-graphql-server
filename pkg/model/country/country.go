@@ -7,13 +7,14 @@ import (
 )
 
 // Country for fetching data interface
+// - implementation is in repository
 type Country interface {
 	Fetch(id string) (*CountryType, error)
 	FetchByName(name string) (*CountryType, error)
 	FetchAll() ([]*CountryType, error)
 }
 
-// CountryType is type of user
+// CountryType is type of country
 type CountryType struct {
 	ID   int    `json:"id" boil:"id"`
 	Code string `json:"country_code" boil:"country_code"`
