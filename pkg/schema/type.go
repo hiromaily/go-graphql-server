@@ -4,6 +4,8 @@ import (
 	"github.com/graphql-go/graphql"
 )
 
+// FIXME: define these types into each proper domain pkg/model/*
+
 // Scalar Type
 // - graphql.Int
 // - graphql.Float

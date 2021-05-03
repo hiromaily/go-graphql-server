@@ -3,12 +3,14 @@ package schema
 import (
 	"github.com/graphql-go/graphql"
 
+	"github.com/hiromaily/go-graphql-server/pkg/model/company"
 	"github.com/hiromaily/go-graphql-server/pkg/model/country"
 	"github.com/hiromaily/go-graphql-server/pkg/model/user"
 )
 
 func newQueryType(
 	userResolver user.UserFieldResolver,
+	companyResolver company.CompanyFieldResolver,
 	countryResolver country.CountryFieldResolver,
 ) *graphql.Object {
 	/*
@@ -45,7 +47,27 @@ func newQueryType(
 					Resolve:     userResolver.List,
 				},
 				/*
-				   curl -g 'http://localhost:8080/graphql?query={country(id:"1"){name,name,code}}'
+				   curl -g 'http://localhost:8080/graphql?query={company(id:"1"){id,name,country}}'
+				*/
+				"company": &graphql.Field{
+					Type: countryType,
+					Args: graphql.FieldConfigArgument{
+						"id": &graphql.ArgumentConfig{
+							Type: graphql.String,
+						},
+					},
+					Resolve: companyResolver.GetByID,
+				},
+				/*
+				   curl -g 'http://localhost:8080/graphql?query={companyList{id,name}}'
+				*/
+				"companyList": &graphql.Field{
+					Type:        graphql.NewList(companyType),
+					Description: "List of company",
+					Resolve:     companyResolver.List,
+				},
+				/*
+				   curl -g 'http://localhost:8080/graphql?query={country(id:"1"){id,name,code}}'
 				*/
 				"country": &graphql.Field{
 					Type: countryType,

@@ -3,6 +3,7 @@ package schema
 import (
 	"github.com/graphql-go/graphql"
 
+	"github.com/hiromaily/go-graphql-server/pkg/model/company"
 	"github.com/hiromaily/go-graphql-server/pkg/model/country"
 	"github.com/hiromaily/go-graphql-server/pkg/model/user"
 )
@@ -10,11 +11,13 @@ import (
 // NewSchema returns graphql.Schema
 func NewSchema(
 	userResolver user.UserFieldResolver,
-	countryResolver country.CountryFieldResolver) graphql.Schema {
+	companyResolver company.CompanyFieldResolver,
+	countryResolver country.CountryFieldResolver,
+) graphql.Schema {
 	// schema
 	schema, _ := graphql.NewSchema(
 		graphql.SchemaConfig{
-			Query:    newQueryType(userResolver, countryResolver),
+			Query:    newQueryType(userResolver, companyResolver, countryResolver),
 			Mutation: newMutationType(userResolver),
 		},
 	)

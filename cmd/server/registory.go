@@ -8,10 +8,11 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/hiromaily/go-graphql-server/pkg/config"
+	"github.com/hiromaily/go-graphql-server/pkg/db/mysql"
 	"github.com/hiromaily/go-graphql-server/pkg/logger"
+	"github.com/hiromaily/go-graphql-server/pkg/model/company"
 	"github.com/hiromaily/go-graphql-server/pkg/model/country"
 	"github.com/hiromaily/go-graphql-server/pkg/model/user"
-	"github.com/hiromaily/go-graphql-server/pkg/mysql"
 	"github.com/hiromaily/go-graphql-server/pkg/repository"
 	"github.com/hiromaily/go-graphql-server/pkg/schema"
 	"github.com/hiromaily/go-graphql-server/pkg/server"
@@ -27,6 +28,7 @@ type registry struct {
 	logger      *zap.Logger
 	mysqlClient *sql.DB
 	userRepo    user.User
+	companyRepo company.Company
 	countryRepo country.Country
 }
 
@@ -55,6 +57,7 @@ func (r *registry) newLogger() *zap.Logger {
 func (r *registry) newSchema() graphql.Schema {
 	return schema.NewSchema(
 		r.newUserFieldResolver(),
+		r.newCompanyFieldResolver(),
 		r.newCountryFieldResolver(),
 	)
 }
@@ -66,31 +69,18 @@ func (r *registry) newUserFieldResolver() user.UserFieldResolver {
 	)
 }
 
+func (r *registry) newCompanyFieldResolver() company.CompanyFieldResolver {
+	return company.NewCompanyFieldResolve(
+		r.newLogger(),
+		r.newComanyRepo(),
+	)
+}
+
 func (r *registry) newCountryFieldResolver() country.CountryFieldResolver {
 	return country.NewCountryFieldResolve(
 		r.newLogger(),
 		r.newCountryRepo(),
 	)
-}
-
-func (r *registry) newCountryRepo() country.Country {
-	if r.countryRepo == nil {
-		if r.conf.MySQL.IsEnabled {
-			// using DB
-			r.countryRepo = repository.NewCountryDBRepo(
-				r.newMySQLClient(),
-				r.newLogger(),
-			)
-		} else {
-			// map pattern
-			repo, err := repository.NewCountryMapRepo()
-			if err != nil {
-				panic(err)
-			}
-			r.countryRepo = repo
-		}
-	}
-	return r.countryRepo
 }
 
 func (r *registry) newUserRepo() user.User {
@@ -112,6 +102,47 @@ func (r *registry) newUserRepo() user.User {
 		}
 	}
 	return r.userRepo
+}
+
+func (r *registry) newComanyRepo() company.Company {
+	if r.companyRepo == nil {
+		if r.conf.MySQL.IsEnabled {
+			// using DB
+			r.companyRepo = repository.NewCompanyDBRepo(
+				r.newMySQLClient(),
+				r.newLogger(),
+				r.newCountryRepo(),
+			)
+		} else {
+			// map pattern
+			repo, err := repository.NewCompanyMapRepo()
+			if err != nil {
+				panic(err)
+			}
+			r.companyRepo = repo
+		}
+	}
+	return r.companyRepo
+}
+
+func (r *registry) newCountryRepo() country.Country {
+	if r.countryRepo == nil {
+		if r.conf.MySQL.IsEnabled {
+			// using DB
+			r.countryRepo = repository.NewCountryDBRepo(
+				r.newMySQLClient(),
+				r.newLogger(),
+			)
+		} else {
+			// map pattern
+			repo, err := repository.NewCountryMapRepo()
+			if err != nil {
+				panic(err)
+			}
+			r.countryRepo = repo
+		}
+	}
+	return r.countryRepo
 }
 
 func (r *registry) newMySQLClient() *sql.DB {
