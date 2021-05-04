@@ -72,10 +72,19 @@ var workHistoryType = graphql.NewObject(
 		Name: "WorkHisotry",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
-				Type: graphql.NewNonNull(graphql.Int),
+				Type: graphql.Int,
+			},
+			"user_id": &graphql.Field{
+				Type: graphql.Int,
 			},
 			"company": &graphql.Field{
-				Type: companyType,
+				Type: graphql.String,
+			},
+			"title": &graphql.Field{
+				Type: graphql.String,
+			},
+			"description": &graphql.Field{
+				Type: graphql.String,
 			},
 			"started_at": &graphql.Field{
 				Type: graphql.DateTime,

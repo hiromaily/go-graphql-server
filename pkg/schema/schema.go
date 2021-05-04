@@ -18,7 +18,8 @@ func NewSchema(
 	schema, _ := graphql.NewSchema(
 		graphql.SchemaConfig{
 			Query:    newQueryType(userResolver, companyResolver, countryResolver),
-			Mutation: newMutationType(userResolver),
+			Mutation: newMutationType(userResolver, companyResolver),
+			// Subscription: // TODO: implementation
 		},
 	)
 	return schema

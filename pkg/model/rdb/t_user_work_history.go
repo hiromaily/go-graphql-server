@@ -29,7 +29,7 @@ type TUserWorkHistory struct {
 	UserID      int        `boil:"user_id" json:"user_id" toml:"user_id" yaml:"user_id"`
 	CompanyID   int        `boil:"company_id" json:"company_id" toml:"company_id" yaml:"company_id"`
 	Title       string     `boil:"title" json:"title" toml:"title" yaml:"title"`
-	Description types.JSON `boil:"description" json:"description" toml:"description" yaml:"description"`
+	Description string     `boil:"description" json:"description" toml:"description" yaml:"description"`
 	TechIds     types.JSON `boil:"tech_ids" json:"tech_ids" toml:"tech_ids" yaml:"tech_ids"`
 	StartedAt   null.Time  `boil:"started_at" json:"started_at,omitempty" toml:"started_at" yaml:"started_at,omitempty"`
 	EndedAt     null.Time  `boil:"ended_at" json:"ended_at,omitempty" toml:"ended_at" yaml:"ended_at,omitempty"`
@@ -97,7 +97,7 @@ var TUserWorkHistoryWhere = struct {
 	UserID      whereHelperint
 	CompanyID   whereHelperint
 	Title       whereHelperstring
-	Description whereHelpertypes_JSON
+	Description whereHelperstring
 	TechIds     whereHelpertypes_JSON
 	StartedAt   whereHelpernull_Time
 	EndedAt     whereHelpernull_Time
@@ -108,7 +108,7 @@ var TUserWorkHistoryWhere = struct {
 	UserID:      whereHelperint{field: "`t_user_work_history`.`user_id`"},
 	CompanyID:   whereHelperint{field: "`t_user_work_history`.`company_id`"},
 	Title:       whereHelperstring{field: "`t_user_work_history`.`title`"},
-	Description: whereHelpertypes_JSON{field: "`t_user_work_history`.`description`"},
+	Description: whereHelperstring{field: "`t_user_work_history`.`description`"},
 	TechIds:     whereHelpertypes_JSON{field: "`t_user_work_history`.`tech_ids`"},
 	StartedAt:   whereHelpernull_Time{field: "`t_user_work_history`.`started_at`"},
 	EndedAt:     whereHelpernull_Time{field: "`t_user_work_history`.`ended_at`"},

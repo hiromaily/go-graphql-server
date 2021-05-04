@@ -133,11 +133,11 @@ func (w *workHistoryDB) Update(wt *workhistory.WorkHistoryType) error {
 	return err
 }
 
-func (w *workHistoryDB) Delete(userID int) error {
+func (w *workHistoryDB) Delete(id string) error {
 	ctx := context.Background()
 
 	_, err := models.TUsers(
-		qm.Where("t_user_work_history.user_id=?", userID),
+		qm.Where("t_user_work_history.id=?", id),
 	).DeleteAll(ctx, w.dbConn)
 	return err
 }
