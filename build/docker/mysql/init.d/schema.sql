@@ -101,7 +101,7 @@ CREATE TABLE `t_user_work_history` (
   `user_id`     int(11) COLLATE utf8_unicode_ci NOT NULL COMMENT'user id',
   `company_id`  int(11) COLLATE utf8_unicode_ci NOT NULL COMMENT'company branch id',
   `title`       varchar(40) COLLATE utf8_unicode_ci NOT NULL COMMENT'title',
-  `description` json NOT NULL COMMENT'description',
+  `description` text NOT NULL COMMENT'description',
   `tech_ids`    json NOT NULL COMMENT'tech ids',
   `started_at`  date DEFAULT NULL COMMENT'started date',
   `ended_at`    date DEFAULT NULL COMMENT'ended date',

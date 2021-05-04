@@ -14,6 +14,7 @@ import (
 // - implementation is in repository
 type Company interface {
 	Fetch(id string) (*CompanyType, error)
+	FetchByName(name string) (*CompanyType, error)
 	FetchAll() ([]*CompanyType, error)
 	Insert(ct *CompanyType) error
 	Update(ct *CompanyType) error

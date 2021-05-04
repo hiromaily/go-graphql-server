@@ -50,6 +50,23 @@ func (c *companyDB) Fetch(id string) (*company.CompanyType, error) {
 	return &company, nil
 }
 
+// Fetch returns company by name
+func (c *companyDB) FetchByName(name string) (*company.CompanyType, error) {
+	ctx := context.Background()
+
+	var company company.CompanyType
+	err := models.TCompanies(
+		qm.Select("t_company.id, t_company.name, cty.name as country"),
+		qm.LeftOuterJoin("m_country as cty on t_company.country_id = cty.id"),
+		qm.Where("t_company.name=?", name),
+	).Bind(ctx, c.dbConn, &company)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to call models.TCompanies().Bind() in FetchByName()")
+	}
+
+	return &company, nil
+}
+
 // FetchAll returns all companies
 func (c *companyDB) FetchAll() ([]*company.CompanyType, error) {
 	ctx := context.Background()

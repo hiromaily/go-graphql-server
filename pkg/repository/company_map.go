@@ -43,6 +43,11 @@ func (c *companyMap) Fetch(id string) (*company.CompanyType, error) {
 	return nil, errors.New("company is not found")
 }
 
+// FetchByName returns company by name
+func (c *companyMap) FetchByName(name string) (*company.CompanyType, error) {
+	return nil, errors.New("not implemented")
+}
+
 // FetchAll returns all companies
 func (c *companyMap) FetchAll() ([]*company.CompanyType, error) {
 	if len(c.list) == 0 {
