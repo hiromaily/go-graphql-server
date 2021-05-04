@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"time"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/pkg/errors"
 	"github.com/volatiletech/null/v8"
 	"github.com/volatiletech/sqlboiler/v4/boil"
@@ -76,20 +77,25 @@ func (w *workHistoryDB) Insert(wt *workhistory.WorkHistoryType) error {
 	}
 
 	item := &models.TUserWorkHistory{
-		UserID:    wt.UserID,
-		CompanyID: companyType.ID,
-		Title:     wt.Title,
-		// Description: wt.Description,
+		UserID:      wt.UserID,
+		CompanyID:   companyType.ID,
+		Title:       wt.Title,
+		Description: wt.Description,
 	}
-	// UserID      int        `boil:"user_id" json:"user_id" toml:"user_id" yaml:"user_id"`
-	// CompanyID   int        `boil:"company_id" json:"company_id" toml:"company_id" yaml:"company_id"`
-	// Title       string     `boil:"title" json:"title" toml:"title" yaml:"title"`
-	// Description types.JSON `boil:"description" json:"description" toml:"description" yaml:"description"`
-	// TechIds     types.JSON `boil:"tech_ids" json:"tech_ids" toml:"tech_ids" yaml:"tech_ids"`
-	// StartedAt   null.Time  `boil:"started_at" json:"started_at,omitempty" toml:"started_at" yaml:"started_at,omitempty"`
-	// EndedAt     null.Time  `boil:"ended_at" json:"ended_at,omitempty" toml:"ended_at" yaml:"ended_at,omitempty"`
-	// CreatedAt   null.Time  `boil:"created_at" json:"created_at,omitempty" toml:"created_at" yaml:"created_at,omitempty"`
-	// UpdatedAt   null.Time  `boil:"updated_at" json:"updated_at,omitempty" toml:"updated_at" yaml:"updated_at,omitempty"`
+	if wt.TechIDs != nil {
+		// convert []int to types.JSON(json.RawMessage)
+		marshaled, err := jsoniter.Marshal(wt.TechIDs)
+		if err != nil {
+			return err
+		}
+		item.TechIds = marshaled
+	}
+	if wt.StartedAt != nil {
+		item.CreatedAt = null.TimeFromPtr(wt.StartedAt)
+	}
+	if wt.EndedAt != nil {
+		item.EndedAt = null.TimeFromPtr(wt.EndedAt)
+	}
 
 	ctx := context.Background()
 
@@ -115,15 +121,18 @@ func (w *workHistoryDB) Update(wt *workhistory.WorkHistoryType) error {
 	if wt.Title != "" {
 		updCols[models.TUserWorkHistoryColumns.Title] = wt.Title
 	}
-	// UserID      int        `boil:"user_id" json:"user_id" toml:"user_id" yaml:"user_id"`
-	// CompanyID   int        `boil:"company_id" json:"company_id" toml:"company_id" yaml:"company_id"`
-	// Title       string     `boil:"title" json:"title" toml:"title" yaml:"title"`
-	// Description types.JSON `boil:"description" json:"description" toml:"description" yaml:"description"`
-	// TechIds     types.JSON `boil:"tech_ids" json:"tech_ids" toml:"tech_ids" yaml:"tech_ids"`
-	// StartedAt   null.Time  `boil:"started_at" json:"started_at,omitempty" toml:"started_at" yaml:"started_at,omitempty"`
-	// EndedAt     null.Time  `boil:"ended_at" json:"ended_at,omitempty" toml:"ended_at" yaml:"ended_at,omitempty"`
-	// CreatedAt   null.Time  `boil:"created_at" json:"created_at,omitempty" toml:"created_at" yaml:"created_at,omitempty"`
-	// UpdatedAt   null.Time  `boil:"updated_at" json:"updated_at,omitempty" toml:"updated_at" yaml:"updated_at,omitempty"`
+	if wt.Description != "" {
+		updCols[models.TUserWorkHistoryColumns.Description] = wt.Description
+	}
+	if wt.TechIDs != nil {
+		updCols[models.TUserWorkHistoryColumns.TechIds] = wt.TechIDs
+	}
+	if wt.StartedAt != nil {
+		updCols[models.TUserWorkHistoryColumns.StartedAt] = wt.StartedAt
+	}
+	if wt.EndedAt != nil {
+		updCols[models.TUserWorkHistoryColumns.EndedAt] = wt.EndedAt
+	}
 	updCols[models.TUserColumns.UpdatedAt] = null.TimeFrom(time.Now().UTC())
 
 	_, err := models.TUsers(
