@@ -35,6 +35,7 @@ type WorkHistoryType struct {
 
 // WorkHistoryFieldResolver for resolver of schema interface
 type WorkHistoryFieldResolver interface {
+	GetByID(p graphql.ResolveParams) (interface{}, error)
 	GetByUserID(p graphql.ResolveParams) (interface{}, error)
 	List(p graphql.ResolveParams) (interface{}, error)
 	Create(p graphql.ResolveParams) (interface{}, error)
@@ -58,11 +59,20 @@ func NewWorkHistoryFieldResolve(
 	}
 }
 
+// GetByID gets work history by id
+func (w *workHistoryFieldResolver) GetByID(p graphql.ResolveParams) (interface{}, error) {
+	idQuery, isOK := p.Args["id"].(string)
+	if isOK {
+		return w.workHistoryRepo.Fetch(idQuery)
+	}
+	return nil, errors.New("not found")
+}
+
 // GetByUserID gets work history by UserID
 func (w *workHistoryFieldResolver) GetByUserID(p graphql.ResolveParams) (interface{}, error) {
 	idQuery, isOK := p.Args["user_id"].(string)
 	if isOK {
-		return w.workHistoryRepo.Fetch(idQuery)
+		return w.workHistoryRepo.FetchByUserID(idQuery)
 	}
 	return nil, errors.New("not found")
 }
@@ -84,7 +94,7 @@ func (w *workHistoryFieldResolver) Create(p graphql.ResolveParams) (interface{},
 		TechIDs:     []int{},
 		StartedAt:   p.Args["started_at"].(*time.Time),
 	}
-	if v, ok := p.Args["started_at"].(*time.Time); ok {
+	if v, ok := p.Args["ended_at"].(*time.Time); ok {
 		newWorkHistory.EndedAt = v
 	}
 

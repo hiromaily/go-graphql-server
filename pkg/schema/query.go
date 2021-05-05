@@ -6,12 +6,14 @@ import (
 	"github.com/hiromaily/go-graphql-server/pkg/model/company"
 	"github.com/hiromaily/go-graphql-server/pkg/model/country"
 	"github.com/hiromaily/go-graphql-server/pkg/model/user"
+	"github.com/hiromaily/go-graphql-server/pkg/model/workhistory"
 )
 
 func newQueryType(
 	userResolver user.UserFieldResolver,
 	companyResolver company.CompanyFieldResolver,
 	countryResolver country.CountryFieldResolver,
+	workHistoryResolver workhistory.WorkHistoryFieldResolver,
 ) *graphql.Object {
 	/*
 	   Create Query object type with fields "user" has type [userType] by using GraphQLObjectTypeConfig:
@@ -85,6 +87,38 @@ func newQueryType(
 					Type:        graphql.NewList(countryType),
 					Description: "List of country",
 					Resolve:     countryResolver.List,
+				},
+				/*
+				   curl -g 'http://localhost:8080/graphql?query={workHistory(id:"1"){id,company,title}}'
+				*/
+				"workHistory": &graphql.Field{
+					Type: workHistoryType,
+					Args: graphql.FieldConfigArgument{
+						"id": &graphql.ArgumentConfig{
+							Type: graphql.String,
+						},
+					},
+					Resolve: workHistoryResolver.GetByID,
+				},
+				/*
+				   curl -g 'http://localhost:8080/graphql?query={userWorkHistory(user_id:"1"){id,company,title}}'
+				*/
+				"userWorkHistory": &graphql.Field{
+					Type: workHistoryType,
+					Args: graphql.FieldConfigArgument{
+						"user_id": &graphql.ArgumentConfig{
+							Type: graphql.String,
+						},
+					},
+					Resolve: workHistoryResolver.GetByUserID,
+				},
+				/*
+				   curl -g 'http://localhost:8080/graphql?query={workHistoryList(){id,company,title}}'
+				*/
+				"workHistoryList": &graphql.Field{
+					Type:        graphql.NewList(workHistoryType),
+					Description: "List of work history",
+					Resolve:     workHistoryResolver.List,
 				},
 			},
 		},

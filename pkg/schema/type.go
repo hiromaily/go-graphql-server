@@ -69,7 +69,7 @@ var userType = graphql.NewObject(
 
 var workHistoryType = graphql.NewObject(
 	graphql.ObjectConfig{
-		Name: "WorkHisotry",
+		Name: "WorkHistory",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
 				Type: graphql.Int,

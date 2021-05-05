@@ -71,8 +71,15 @@ command:
   curl -g 'http://localhost:%d/graphql?query=mutation+_{deleteUser(id:"2"){id,name,age,country}}'
   curl -g 'http://localhost:8080/graphql?query={company(id:"1"){id,name,country}}'
   curl -g 'http://localhost:8080/graphql?query={companyList{id,name}}'
+  curl -g 'http://localhost:8080/graphql?query=mutation+_{createCompany(name:"TechTech",country:"Japan"){id,name,country}}'
+  curl -g 'http://localhost:8080/graphql?query=mutation+_{updateCompany(id:"1",name:"TechTechTech"){id,name,country}}'
+  curl -g 'http://localhost:8080/graphql?query=mutation+_{deleteCompany(id:"2"){id,name,country}}'
   curl -g 'http://localhost:8080/graphql?query={country(id:"1"){name,name,code}}'
   curl -g 'http://localhost:8080/graphql?query={countryList{id,name}}'
+  curl -g 'http://localhost:8080/graphql?query={workHistory(id:"1"){id,company,title}}'
+  curl -g 'http://localhost:8080/graphql?query={userWorkHistory(user_id:"1"){id,company,title}}'
+  curl -g 'http://localhost:8080/graphql?query={workHistoryList(){id,company,title}}'
+
 `, s.port, s.port, s.port, s.port, s.port)
 	http.ListenAndServe(fmt.Sprintf(":%d", s.port), nil)
 
