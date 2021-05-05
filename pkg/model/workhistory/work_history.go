@@ -13,7 +13,8 @@ import (
 // WorkHistory for fetching data interface
 // - implementation is in repository
 type WorkHistory interface {
-	Fetch(userID string) ([]*WorkHistoryType, error)
+	Fetch(id string) (*WorkHistoryType, error)
+	FetchByUserID(userID string) ([]*WorkHistoryType, error)
 	FetchAll() ([]*WorkHistoryType, error)
 	Insert(wt *WorkHistoryType) error
 	Update(wt *WorkHistoryType) error

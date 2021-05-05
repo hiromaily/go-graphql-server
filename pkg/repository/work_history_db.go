@@ -34,8 +34,26 @@ func NewWorkHistoryDBRepo(dbConn *sql.DB, logger *zap.Logger, company company.Co
 	}
 }
 
-// Fetch returns work history by userID
-func (w *workHistoryDB) Fetch(userID string) ([]*workhistory.WorkHistoryType, error) {
+// Fetch returns work history
+func (w *workHistoryDB) Fetch(id string) (*workhistory.WorkHistoryType, error) {
+	ctx := context.Background()
+
+	var workHistory *workhistory.WorkHistoryType
+	err := models.TUserWorkHistories(
+		qm.Select("wh.user_id, cp.name as company, wh.title, wh.description, wh.started_at, wh.started_at"),
+		qm.From("t_user_work_history as wh"),
+		qm.LeftOuterJoin("t_company as cp on wh.company_id = cp.id"),
+		qm.Where("wh.id=?", id),
+	).Bind(ctx, w.dbConn, &workHistory)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to call models.TUserWorkHistories().Bind() in Fetch()")
+	}
+
+	return workHistory, nil
+}
+
+// FetchByUserID returns work history by userID
+func (w *workHistoryDB) FetchByUserID(userID string) ([]*workhistory.WorkHistoryType, error) {
 	ctx := context.Background()
 
 	var workHistories []*workhistory.WorkHistoryType
@@ -46,7 +64,7 @@ func (w *workHistoryDB) Fetch(userID string) ([]*workhistory.WorkHistoryType, er
 		qm.Where("wh.user_id=?", userID),
 	).Bind(ctx, w.dbConn, &workHistories)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to call models.TUserWorkHistories().Bind() in Fetch()")
+		return nil, errors.Wrap(err, "failed to call models.TUserWorkHistories().Bind() in FetchByUserID()")
 	}
 
 	return workHistories, nil

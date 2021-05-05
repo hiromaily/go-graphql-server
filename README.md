@@ -59,4 +59,4 @@ curl -g 'http://localhost:8080/graphql?query={__schema{queryType{fields{name,des
 - [3 tips for implementing GraphQL in Golang](https://blog.logrocket.com/3-tips-for-implementing-graphql-in-golang/)
 - [GraphQL based solution architecture patterns](https://blog.usejournal.com/graphql-based-solution-architecture-patterns-8905de6ff87e)
 - [GraphQL 入門ガイド](https://circleci.com/ja/blog/introduction-to-graphql/)
-
+- [GolangでGraphQLサーバを組む際に必要になりそうなチェックリスト](https://qiita.com/shufo/items/6739acb9676534a9bcfb)
