@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 
+
 	"github.com/graphql-go/graphql"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"go.uber.org/zap"
@@ -13,6 +14,7 @@ import (
 	"github.com/hiromaily/go-graphql-server/pkg/model/company"
 	"github.com/hiromaily/go-graphql-server/pkg/model/country"
 	"github.com/hiromaily/go-graphql-server/pkg/model/user"
+	"github.com/hiromaily/go-graphql-server/pkg/model/workhistory"
 	"github.com/hiromaily/go-graphql-server/pkg/repository"
 	"github.com/hiromaily/go-graphql-server/pkg/schema"
 	"github.com/hiromaily/go-graphql-server/pkg/server"
@@ -24,12 +26,13 @@ type Registry interface {
 }
 
 type registry struct {
-	conf        *config.Root
-	logger      *zap.Logger
-	mysqlClient *sql.DB
-	userRepo    user.User
-	companyRepo company.Company
-	countryRepo country.Country
+	conf            *config.Root
+	logger          *zap.Logger
+	mysqlClient     *sql.DB
+	userRepo        user.User
+	companyRepo     company.Company
+	countryRepo     country.Country
+	workHistoryRepo workhistory.WorkHistory
 }
 
 // NewRegistry is to register regstry interface
@@ -59,6 +62,7 @@ func (r *registry) newSchema() graphql.Schema {
 		r.newUserFieldResolver(),
 		r.newCompanyFieldResolver(),
 		r.newCountryFieldResolver(),
+		r.newWorkHistoryResolver(),
 	)
 }
 
@@ -80,6 +84,13 @@ func (r *registry) newCountryFieldResolver() country.CountryFieldResolver {
 	return country.NewCountryFieldResolve(
 		r.newLogger(),
 		r.newCountryRepo(),
+	)
+}
+
+func (r *registry) newWorkHistoryResolver() workhistory.WorkHistoryFieldResolver {
+	return workhistory.NewWorkHistoryFieldResolve(
+		r.newLogger(),
+		r.newWorkHistoryRepo(),
 	)
 }
 
@@ -143,6 +154,27 @@ func (r *registry) newCountryRepo() country.Country {
 		}
 	}
 	return r.countryRepo
+}
+
+func (r *registry) newWorkHistoryRepo() workhistory.WorkHistory {
+	if r.workHistoryRepo == nil {
+		if r.conf.MySQL.IsEnabled {
+			// using DB
+			r.workHistoryRepo = repository.NewWorkHistoryDBRepo(
+				r.newMySQLClient(),
+				r.newLogger(),
+				r.newComanyRepo(),
+			)
+		} else {
+			// map pattern
+			repo, err := repository.NewWorkHistoryMapRepo()
+			if err != nil {
+				panic(err)
+			}
+			r.workHistoryRepo = repo
+		}
+	}
+	return r.workHistoryRepo
 }
 
 func (r *registry) newMySQLClient() *sql.DB {
