@@ -149,6 +149,39 @@ func newMutationType(
 				},
 				Resolve: companyResolver.Create,
 			},
+			/*
+			   curl -g 'http://localhost:8080/graphql?query=mutation+_{createWorkHistory(id:1,company:"Google","backend engineer","tech_ids":[1,2,3],"started_at":"2015/1/1"){id,name,country}}'
+			*/
+			"updateWorkHistory": &graphql.Field{
+				Type:        workHistoryType,
+				Description: "Update work history by id",
+				Args: graphql.FieldConfigArgument{
+					"id": &graphql.ArgumentConfig{
+						Type: graphql.NewNonNull(graphql.Int),
+					},
+					"company": &graphql.ArgumentConfig{
+						Type: graphql.NewNonNull(graphql.String),
+					},
+					"title": &graphql.ArgumentConfig{
+						Type: graphql.NewNonNull(graphql.String),
+					},
+					"description": &graphql.ArgumentConfig{
+						Type: graphql.String,
+					},
+					"tech_ids": &graphql.ArgumentConfig{
+						Type: graphql.NewNonNull(graphql.NewList(graphql.Int)),
+					},
+					// FIXME: type: only Date
+					"started_at": &graphql.ArgumentConfig{
+						Type: graphql.NewNonNull(graphql.DateTime),
+					},
+					// FIXME: type: only Date
+					"ended_at": &graphql.ArgumentConfig{
+						Type: graphql.DateTime,
+					},
+				},
+				Resolve: companyResolver.Update,
+			},
 		},
 	})
 

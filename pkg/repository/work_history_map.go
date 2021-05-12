@@ -114,7 +114,7 @@ func (w *workHistoryMap) Update(wt *workhistory.WorkHistoryType) error {
 }
 
 func (w *workHistoryMap) Delete(id string) error {
-	// delelte
+	// delete
 	for key, vals := range w.repo {
 		for idx, v := range vals {
 			if strconv.Itoa(v.ID) == id {
