@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+
 	"github.com/graphql-go/graphql"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"go.uber.org/zap"

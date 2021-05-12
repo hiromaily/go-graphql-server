@@ -1,6 +1,11 @@
 #!/bin/bash
 
 echo 'check Query'
+# errors=$(curl -g -s 'http://localhost:8080/graphql?query={user(id:"1"){id,name,age,country}}' | jq .errors)
+# if [ -z "$errors" ]; then
+#   echo 'errors is null'
+# fi
+
 curl -g 'http://localhost:8080/graphql?query={user(id:"1"){id,name,age,country}}'
 curl -g 'http://localhost:8080/graphql?query={userList{id,name}}'
 

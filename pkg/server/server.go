@@ -2,10 +2,9 @@ package server
 
 import (
 	"fmt"
-	"net/http"
-
 	"github.com/graphql-go/graphql"
 	"go.uber.org/zap"
+	"net/http"
 
 	"github.com/hiromaily/go-graphql-server/pkg/server/handler"
 	"github.com/hiromaily/go-graphql-server/pkg/server/httpmethod"
@@ -64,11 +63,11 @@ func (s *server) Start() error {
 	s.logger.Info("server is running", zap.Int("port", s.port))
 	fmt.Printf(`
 command:
-  curl -g 'http://localhost:%d/graphql?query={user(id:"1"){name}}'
-  curl -g 'http://localhost:%d/graphql?query={userList{id,name}}'
-  curl -g 'http://localhost:%d/graphql?query=mutation+_{createUser(name:"Tom",age:15,country:"Japan"){id,name,age,country}}'
-  curl -g 'http://localhost:%d/graphql?query=mutation+_{updateUser(id:"1",name:"Dummy",age:99,country:"Japan"){id,name,age,country}}'
-  curl -g 'http://localhost:%d/graphql?query=mutation+_{deleteUser(id:"2"){id,name,age,country}}'
+  curl -g 'http://localhost:8080/graphql?query={user(id:"1"){name}}'
+  curl -g 'http://localhost:8080/graphql?query={userList{id,name}}'
+  curl -g 'http://localhost:8080/graphql?query=mutation+_{createUser(name:"Tom",age:15,country:"Japan"){id,name,age,country}}'
+  curl -g 'http://localhost:8080/graphql?query=mutation+_{updateUser(id:"1",name:"Dummy",age:99,country:"Japan"){id,name,age,country}}'
+  curl -g 'http://localhost:8080/graphql?query=mutation+_{deleteUser(id:"2"){id,name,age,country}}'
 
   curl -g 'http://localhost:8080/graphql?query={company(id:"1"){id,name,country}}'
   curl -g 'http://localhost:8080/graphql?query={companyList{id,name}}'
@@ -84,11 +83,15 @@ command:
   curl -g 'http://localhost:8080/graphql?query={workHistoryList(){id,company,title}}'
   curl -g 'http://localhost:8080/graphql?query=mutation+_{createWorkHistory(user_id:1,company:"Google","backend engineer","tech_ids":[1,2,3],"started_at":"2015/1/1"){id,name,country}}'
   curl -g 'http://localhost:8080/graphql?query=mutation+_{updateWorkHistory(id:1,company:"Google","backend engineer","tech_ids":[1,2,3],"started_at":"2015/1/1"){id,name,country}}'
-`, s.port, s.port, s.port, s.port, s.port)
+`)
 	http.ListenAndServe(fmt.Sprintf(":%d", s.port), nil)
 
 	return nil
 }
+
+//func (s *server) StartTest() *httptest.Server {
+//	httptest.NewServer()
+//}
 
 // Close closes dependencies
 func (s *server) Close() {
