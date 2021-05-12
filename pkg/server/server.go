@@ -83,6 +83,7 @@ command:
   curl -g 'http://localhost:8080/graphql?query={userWorkHistory(user_id:"1"){id,company,title}}'
   curl -g 'http://localhost:8080/graphql?query={workHistoryList(){id,company,title}}'
   curl -g 'http://localhost:8080/graphql?query=mutation+_{createWorkHistory(user_id:1,company:"Google","backend engineer","tech_ids":[1,2,3],"started_at":"2015/1/1"){id,name,country}}'
+  curl -g 'http://localhost:8080/graphql?query=mutation+_{updateWorkHistory(id:1,company:"Google","backend engineer","tech_ids":[1,2,3],"started_at":"2015/1/1"){id,name,country}}'
 `, s.port, s.port, s.port, s.port, s.port)
 	http.ListenAndServe(fmt.Sprintf(":%d", s.port), nil)
 

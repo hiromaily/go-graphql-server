@@ -150,7 +150,7 @@ func newMutationType(
 				Resolve: companyResolver.Create,
 			},
 			/*
-			   curl -g 'http://localhost:8080/graphql?query=mutation+_{createWorkHistory(id:1,company:"Google","backend engineer","tech_ids":[1,2,3],"started_at":"2015/1/1"){id,name,country}}'
+			   curl -g 'http://localhost:8080/graphql?query=mutation+_{updateWorkHistory(id:1,company:"Google","backend engineer","tech_ids":[1,2,3],"started_at":"2015/1/1"){id,name,country}}'
 			*/
 			"updateWorkHistory": &graphql.Field{
 				Type:        workHistoryType,
