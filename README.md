@@ -4,6 +4,8 @@ GraphQL server sample using [graphql-go/graphql](https://github.com/graphql-go/g
 ## Requirements
 - Golang 1.16+
 - [direnv](https://direnv.net/) for MacUser for environment variable. See `.envrc`
+- MySQL
+   - Though MySQL is used in this sample, PostgreSQL must be better due to [tool: PostGraphile](https://www.graphile.org/)s
 
 ## Setup
 ```
@@ -53,6 +55,7 @@ curl -g 'http://localhost:8080/graphql?query={__schema{queryType{fields{name,des
 ## References
 - [graphql.org](https://graphql.org/)
 - [tool: graphiql](https://github.com/graphql/graphiql)
+- [tool: PostGraphile](https://www.graphile.org/) is Extensible high-performance automatic GraphQL API for PostgreSQL
 - [GraphQL Golang Libraries](https://graphql.org/code/#go)
     - [An implementation of GraphQL for Go](https://github.com/graphql-go/graphql)
     - [Go generate based graphql server library](https://github.com/99designs/gqlgen)
