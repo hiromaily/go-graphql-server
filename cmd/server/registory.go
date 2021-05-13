@@ -46,6 +46,7 @@ func (r *registry) NewServer() server.Server {
 		r.newSchema(),
 		r.conf.Server.HTTPMethod,
 		r.conf.Server.Port,
+		r.newMySQLClient(),
 	)
 }
 
