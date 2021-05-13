@@ -65,7 +65,6 @@ func TestQueryUser(t *testing.T) {
 	type want struct {
 		statusCode int
 		respUser   *ResponseUser
-		err        error
 	}
 	tests := []struct {
 		name string
@@ -88,7 +87,25 @@ func TestQueryUser(t *testing.T) {
 						},
 					},
 				},
-				err: nil,
+			},
+		},
+		{
+			name: "user for id, name",
+			args: args{
+				url:     `/graphql?query={user(id:"1"){id,name}}`,
+				method:  "GET",
+				headers: nil,
+			},
+			want: want{
+				statusCode: http.StatusOK,
+				respUser: &ResponseUser{
+					Data: UserData{
+						User{
+							ID:   1,
+							Name: "Dan",
+						},
+					},
+				},
 			},
 		},
 	}
@@ -116,8 +133,8 @@ func TestQueryUser(t *testing.T) {
 				t.Errorf("fail to call [%s]", tt.args.url)
 				return
 			}
-			if res.StatusCode != http.StatusOK {
-				t.Errorf("status code is not 200, %d was returned", res.StatusCode)
+			if res.StatusCode != tt.want.statusCode {
+				t.Errorf("status code: got %d, but want %d", res.StatusCode, tt.want.statusCode)
 				return
 			}
 			// check body
@@ -131,7 +148,8 @@ func TestQueryUser(t *testing.T) {
 			err = json.Unmarshal(body, &respUser)
 
 			debug.DigIn(respUser)
-			if !reflect.DeepEqual(respUser, tt.want.respUser) {
+			// debug.DigIn(tt.want.respUser)
+			if !reflect.DeepEqual(respUser, *tt.want.respUser) {
 				t.Errorf("[url: %s] got = %v, want %v", tt.args.url, respUser, tt.want.respUser)
 			}
 		})
