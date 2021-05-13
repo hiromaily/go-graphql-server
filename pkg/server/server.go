@@ -1,10 +1,18 @@
 package server
 
 import (
+	"context"
 	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/gorilla/mux"
 	"github.com/graphql-go/graphql"
 	"go.uber.org/zap"
-	"net/http"
 
 	"github.com/hiromaily/go-graphql-server/pkg/server/handler"
 	"github.com/hiromaily/go-graphql-server/pkg/server/httpmethod"
@@ -56,8 +64,19 @@ func newServer(
 
 // Start starts server
 func (s *server) Start() error {
-	if err := handler.Initialize(s.schema, s.method); err != nil {
+	r := mux.NewRouter()
+
+	if err := handler.GorillaMux(r, s.schema, s.method); err != nil {
 		return err
+	}
+
+	srv := &http.Server{
+		Addr: fmt.Sprintf("0.0.0.0:%d", s.port),
+		// Good practice to set timeouts to avoid Slowloris attacks.
+		WriteTimeout: time.Second * 15,
+		ReadTimeout:  time.Second * 15,
+		IdleTimeout:  time.Second * 60,
+		Handler:      r,
 	}
 
 	s.logger.Info("server is running", zap.Int("port", s.port))
@@ -84,7 +103,27 @@ command:
   curl -g 'http://localhost:8080/graphql?query=mutation+_{createWorkHistory(user_id:1,company:"Google","backend engineer","tech_ids":[1,2,3],"started_at":"2015/1/1"){id,name,country}}'
   curl -g 'http://localhost:8080/graphql?query=mutation+_{updateWorkHistory(id:1,company:"Google","backend engineer","tech_ids":[1,2,3],"started_at":"2015/1/1"){id,name,country}}'
 `)
-	http.ListenAndServe(fmt.Sprintf(":%d", s.port), nil)
+
+	go func() {
+		if err := srv.ListenAndServe(); err != nil {
+			log.Println(err)
+		}
+	}()
+
+	done := make(chan os.Signal, 1)
+	signal.Notify(done, syscall.SIGINT, syscall.SIGTERM)
+	<-done
+
+	s.logger.Info("Shutting down server...")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer func() {
+		cancel()
+		s.Close()
+	}()
+	if err := srv.Shutdown(ctx); err != nil {
+		s.logger.Error("fatal to call Shutdown():", zap.Error(err))
+		return err
+	}
 
 	return nil
 }

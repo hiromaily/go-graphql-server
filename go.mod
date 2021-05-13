@@ -9,6 +9,7 @@ require (
 	github.com/go-playground/validator/v10 v10.5.0
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/gofrs/uuid v4.0.0+incompatible // indirect
+	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/graphql-go/graphql v0.7.9
 	github.com/json-iterator/go v1.1.11
 	github.com/leodido/go-urn v1.2.1 // indirect
