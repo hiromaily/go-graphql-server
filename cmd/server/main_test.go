@@ -2,12 +2,16 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
 
+	jsoniter "github.com/json-iterator/go"
 	"github.com/pkg/errors"
+
+	"github.com/hiromaily/go-graphql-server/pkg/debug"
 )
 
 type ResponseUser struct {
@@ -115,6 +119,17 @@ func TestQueryUser(t *testing.T) {
 				t.Errorf("status code is not 200, %d was returned", res.StatusCode)
 				return
 			}
+			// check body
+			body, err := io.ReadAll(res.Body)
+			if err != nil {
+				t.Error("fail to call io.ReadAll(res.Body)")
+				return
+			}
+			var respUser ResponseUser
+			json := jsoniter.ConfigCompatibleWithStandardLibrary
+			err = json.Unmarshal(body, &respUser)
+
+			debug.DigIn(respUser)
 		})
 	}
 }

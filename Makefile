@@ -58,6 +58,16 @@ build-version:
 run:
 	go run -v ./cmd/server/
 
+###############################################################################
+# test
+###############################################################################
+.PHONY: test
+test:
+	go test -race -v ./cmd/server/...
+
+.PHONY: integration-test
+integration-test:
+	go test -race -tags=integration -v ./pkg/...
 
 ###############################################################################
 # curl sample

@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/BurntSushi/toml v0.3.1
+	github.com/bookerzzz/grok v0.0.0 // indirect
 	github.com/ericlagergren/decimal v0.0.0-20210307182354-5f8425a47c58 // indirect
 	github.com/friendsofgo/errors v0.9.2
 	github.com/go-playground/validator/v10 v10.5.0
