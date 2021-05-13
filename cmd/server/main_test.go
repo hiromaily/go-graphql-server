@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 	"time"
 
@@ -130,6 +131,9 @@ func TestQueryUser(t *testing.T) {
 			err = json.Unmarshal(body, &respUser)
 
 			debug.DigIn(respUser)
+			if !reflect.DeepEqual(respUser, tt.want.respUser) {
+				t.Errorf("[url: %s] got = %v, want %v", tt.args.url, respUser, tt.want.respUser)
+			}
 		})
 	}
 }
